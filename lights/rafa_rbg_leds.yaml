@@ -1,0 +1,28 @@
+platform: mqtt
+name: rafa_rgb_leds
+availability_topic: tele/rafa_rgb/LWT
+payload_available: Online
+payload_not_available: Offline
+state_topic: stat/rafa_rgb/RESULT
+command_topic: cmnd/rafa_rgb/POWER
+payload_on: "ON"
+payload_off: "OFF"
+on_command_type: 'last'
+state_value_template: "{{ value_json.POWER }}"
+brightness_state_topic: stat/rafa_rgb/RESULT
+brightness_command_topic: cmnd/rafa_rgb/Dimmer
+brightness_scale: 100
+brightness_value_template: "{{ value_json.Dimmer | float }}"
+rgb_command_topic: cmnd/rafa_rgb/Color
+rgb_command_template: "{{ '%02x%02x%02x' | format(red, green, blue)}}"
+rgb_state_topic: stat/rafa_rgb/RESULT
+rgb_value_template: "{{(value_json.Channel[0]*2.55)|int}},{{(value_json.Channel[1]*2.55)|int}},{{(value_json.Channel[2]*2.55)|int}}"
+effect_state_topic: stat/rafa_rgb/RESULT
+effect_command_topic: cmnd/rafa_rgb/Scheme
+effect_list:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+optimistic: false

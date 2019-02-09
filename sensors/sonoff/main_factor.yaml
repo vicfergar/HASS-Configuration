@@ -1,0 +1,7 @@
+﻿platform: mqtt
+name: main_factor
+state_topic: "tele/main_wattmeter/SENSOR"
+value_template: "{{ value_json.ENERGY.Factor }}"
+availability_topic: tele/main_wattmeter/LWT
+payload_available: Online
+payload_not_available: Offline

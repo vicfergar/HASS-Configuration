@@ -1,0 +1,6 @@
+platform: generic_thermostat
+name: bathroom_climate
+heater: switch.bathroom_heater
+target_sensor: sensor.bathroom_temperature
+max_temp: 28
+min_temp: 10

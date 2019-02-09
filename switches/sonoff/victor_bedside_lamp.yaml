@@ -1,0 +1,9 @@
+platform: mqtt
+name: victor_bedside_lamp
+state_topic: "stat/sonoff_s20_2_victor/POWER1"
+command_topic: "cmnd/sonoff_s20_2_victor/POWER1"
+payload_on: "ON"
+payload_off: "OFF"
+availability_topic: tele/sonoff_s20_2_victor/LWT
+payload_available: Online
+payload_not_available: Offline

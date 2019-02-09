@@ -1,0 +1,23 @@
+platform: broadlink
+name: livingroom_climate
+host: !secret victor_rm3_ip
+mac: !secret victor_rm3_mac
+ircodes_ini: 'broadlink_climate_codes/fujitsu_general_AR-AB10.ini'
+min_temp: 16
+max_temp: 30
+target_temp: 20
+target_temp_step: 1
+temp_sensor: sensor.livingroom_ble_sensor_temperature
+default_operation: 'off'
+default_fan_mode: mid
+customize:
+  operations:
+    - 'off'
+    - cool
+    - heat
+    - dry
+  fan_modes:
+    #- low
+    #- mid
+    #- high
+    - auto

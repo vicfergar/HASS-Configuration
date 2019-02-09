@@ -1,0 +1,8 @@
+﻿platform: mqtt
+name: victor_ble_sensor_temperature
+state_topic: livingroom_ble_tracker/sensor/victor_temperature/state
+availability_topic: livingroom_ble_tracker/status
+payload_available: online
+payload_not_available: offline
+qos: 0
+unit_of_measurement: '°C'

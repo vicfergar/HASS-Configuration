@@ -1,0 +1,3 @@
+platform: generic
+still_image_url: !secret xiaofang_motioneye_url
+name: Xiaofang

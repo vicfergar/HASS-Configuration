@@ -1,0 +1,8 @@
+platform: onkyo
+host: 192.168.1.108
+name: av_player
+sources:
+  pc: 'SteamLink'
+  bd-dvd: 'Raspberry pi'
+  fm: 'Radio'
+  game: 'PS4'

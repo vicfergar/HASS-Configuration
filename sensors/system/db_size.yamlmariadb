@@ -1,0 +1,7 @@
+platform: sql
+db_url: !secret db_connection_str
+queries:
+- name: db_size
+  query: "SELECT ROUND(SUM( data_length + index_length)/1024/1024) as db_size FROM information_schema.TABLES where table_schema = 'homeassistant'"
+  column: "db_size"
+  unit_of_measurement: MB 

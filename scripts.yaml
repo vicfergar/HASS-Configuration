@@ -1,0 +1,15 @@
+open_entry_door:
+  sequence:
+  - data:
+      topic: cmnd/entry_phone/OPENDOOR
+    service: mqtt.publish
+  alias: open_entry_door
+timer_rafa_broadlink_s4:
+  sequence:
+  - data:
+      entity_id: switch.rafa_broadlink_s4
+    service: switch.turn_on
+  - delay: 00:20
+  - data:
+      entity_id: switch.rafa_broadlink_s4
+    service: switch.turn_off

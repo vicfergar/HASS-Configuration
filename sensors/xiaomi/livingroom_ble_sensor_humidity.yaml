@@ -1,0 +1,8 @@
+﻿platform: mqtt
+name: livingroom_ble_sensor_humidity
+state_topic: livingroom_ble_tracker/sensor/livingroom_humidity/state
+availability_topic: livingroom_ble_tracker/status
+payload_available: online
+payload_not_available: offline
+qos: 0
+unit_of_measurement: '%'

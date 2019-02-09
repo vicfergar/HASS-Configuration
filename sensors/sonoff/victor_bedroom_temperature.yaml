@@ -1,0 +1,8 @@
+﻿platform: mqtt
+name: victor_bedroom_temperature
+state_topic: tele/victor_heater/DHT/TEMPERATURE
+availability_topic: tele/victor_heater/LWT
+payload_available: Online
+payload_not_available: Offline
+qos: 0
+unit_of_measurement: '°C'

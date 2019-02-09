@@ -1,0 +1,9 @@
+﻿platform: broadlink
+host: !secret victor_mp1_ip
+mac: !secret victor_mp1_mac
+type: mp1
+slots:
+  slot_1: 'livingroom_heater'
+  slot_2: 'victor_s2'
+  slot_3: 'victor_monitor'
+  slot_4: 'desktop_lamp'

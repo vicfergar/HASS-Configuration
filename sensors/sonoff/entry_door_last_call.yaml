@@ -1,0 +1,4 @@
+﻿platform: mqtt
+name: entry_door_last_call
+state_topic: "stat/entry_phone/ENTRY_PHONE"
+value_template: '{{ now().strftime("%a %-H:%M") }}'

@@ -1,0 +1,3 @@
+﻿platform: cert_expiry
+name: ssl_certificate_expiry
+host: !secret http_base_url

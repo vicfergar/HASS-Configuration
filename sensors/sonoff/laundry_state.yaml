@@ -1,0 +1,7 @@
+﻿platform: mqtt
+name: laundry_state
+state_topic: stat/laundry/LAUNDRY
+value_template: "{{ value_json.State }}"
+availability_topic: tele/laundry/LWT
+payload_available: Online
+payload_not_available: Offline

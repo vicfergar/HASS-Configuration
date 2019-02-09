@@ -1,0 +1,9 @@
+﻿platform: mqtt
+name: watering
+state_topic: "stat/watering/POWER1"
+command_topic: "cmnd/watering/POWER1"
+payload_on: "ON"
+payload_off: "OFF"
+availability_topic: tele/watering/LWT
+payload_available: Online
+payload_not_available: Offline

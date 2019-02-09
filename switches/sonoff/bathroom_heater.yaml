@@ -1,0 +1,9 @@
+platform: mqtt
+name: bathroom_heater
+state_topic: "stat/rafa_s20/POWER1"
+command_topic: "cmnd/rafa_s20/POWER1"
+payload_on: "ON"
+payload_off: "OFF"
+availability_topic: tele/rafa_s20/LWT
+payload_available: Online
+payload_not_available: Offline

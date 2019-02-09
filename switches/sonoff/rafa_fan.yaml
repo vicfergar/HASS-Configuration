@@ -1,0 +1,9 @@
+platform: mqtt
+name: rafa_fan
+state_topic: "stat/rafa_fan/POWER1"
+command_topic: "cmnd/rafa_fan/POWER1"
+payload_on: "ON"
+payload_off: "OFF"
+availability_topic: tele/rafa_fan/LWT
+payload_available: Online
+payload_not_available: Offline

@@ -1,0 +1,9 @@
+platform: mqtt
+name: sofa_lamp
+state_topic: "stat/ikea_lamp/POWER1"
+command_topic: "cmnd/ikea_lamp/POWER1"
+payload_on: "ON"
+payload_off: "OFF"
+availability_topic: tele/ikea_lamp/LWT
+payload_available: Online
+payload_not_available: Offline

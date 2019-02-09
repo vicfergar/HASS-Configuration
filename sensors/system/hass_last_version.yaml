@@ -1,0 +1,5 @@
+﻿platform: scrape
+name: hass_last_version
+resource: https://home-assistant.io
+select: ".current-version h1"
+value_template: '{{ value.split(":")[1] }}'

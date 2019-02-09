@@ -1,0 +1,9 @@
+platform: mqtt
+name: livingroom_button
+state_topic: "stat/button_livingroom/POWER1"
+command_topic: "cmnd/button_livingroom/POWER1"
+payload_on: "ON"
+payload_off: "OFF"
+availability_topic: tele/button_livingroom/LWT
+payload_available: Online
+payload_not_available: Offline

@@ -1,0 +1,198 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 10
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Madrid
+  # Customization file
+  customize: !include customize.yaml
+  auth_providers:
+    - type: homeassistant
+  whitelist_external_dirs:
+    - /config/
+
+# Enable the auth component
+#auth:
+
+# Enable Lovelace in xaml mode
+lovelace:
+  mode: yaml
+
+# Show links to resources in log and frontend
+#introduction:
+
+# Enables the frontend
+frontend:
+  themes: !include_dir_merge_named themes
+
+# Enables configuration UI
+config:
+
+http:
+  base_url: !secret http_base_url
+  api_password: !secret http_password
+  ssl_certificate: !secret http_certificate
+  ssl_key: !secret http_key
+  trusted_networks:
+    - 127.0.0.1
+    - 192.168.1.0/24
+  cors_allowed_origins:
+    - http://hassio.local:7080
+  ip_ban_enabled: True
+  login_attempts_threshold: 5
+
+# MQTT Broker
+mqtt:
+  broker: core-mosquitto
+  username: !secret mqtt_user
+  password: !secret mqtt_password
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  include_used_components: true
+
+# Enables wake on lan
+wake_on_lan:
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+#conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+weather:
+  - platform: darksky
+    name: home_weather
+    api_key: !secret darksky_api_key
+
+# Text to speech
+tts:
+  - platform: google
+
+# Google Calendar API
+#google:
+#  client_id: !secret google_api_client_id
+#  client_secret: !secret google_api_client_secret
+
+# GPS Presence detection
+device_tracker:
+#  - platform: bluetooth_tracker
+  - platform: google_maps
+    username: !secret google_shared_account
+    password: !secret http_password
+
+# Logs
+logger:
+  default: warning
+  logs:
+    homeassistant.components.history: debug
+    homeassistant.components.recorder: debug
+
+# Enables recorder in external database
+recorder:
+#  db_url: !secret db_connection_str
+  purge_keep_days: 3
+  exclude:
+    domains:
+      - automation
+      - camera
+      - group
+      - script
+      - zone
+    entities:
+      - sensor.hass_last_version
+      - sensor.last_boot
+      - sensor.installed_version
+      - sensor.ssl_certificate_expiry
+      - sensor.laundry_time
+      - sensor.entry_door_last_call
+      - sensor.position_livingroom_cover1
+      - sensor.main_current
+      - sensor.main_energy
+      - sensor.main_power
+      - sensor.main_voltage
+      - sensor.main_factor
+      - sensor.rafa_blitzwolf_current
+      - sensor.rafa_blitzwolf_energy
+      - sensor.rafa_blitzwolf_power
+      - sensor.rafa_blitzwolf_voltage
+      - sensor.victor_pow_current
+      - sensor.victor_pow_energy
+      - sensor.victor_pow_power
+      - sensor.victor_pow_voltage
+
+influxdb:
+  host: a0d7b954-influxdb
+  port: 8086
+  database: homeassistant
+  username: !secret influxdb_user
+  password: !secret influxdb_password
+  max_retries: 3
+  default_measurement: state
+
+panel_iframe:
+  grafana:
+    title: Grafana
+    icon: mdi:chart-areaspline
+    url: !secret grafana_url
+  node_red:
+    title: Node-RED
+    icon: mdi:sitemap
+    url: !secret nodered_url
+  ide:
+    title: IDE
+    icon: mdi:code-braces
+    url: !secret ide_url
+  cctv:
+    title: CCTV
+    icon: mdi:cctv
+    url: !secret cctv_url
+  log:
+    title: Log
+    icon: mdi:magnify
+    url: !secret hasslog_url
+  glances:
+    title: Glances
+    icon: mdi:speedometer
+    url: !secret glances_url
+
+# INCLUDE REGION #
+automation: !include automations.yaml
+script: !include scripts.yaml
+input_text: !include input_text.yaml
+google_assistant: !include google_assistant.yaml
+
+binary_sensor: !include_dir_list binary_sensors/
+camera: !include_dir_list cameras/
+climate: !include_dir_list climates/
+cover: !include_dir_list covers/
+fan: !include_dir_list fans/
+light: !include_dir_list lights/
+media_player: !include_dir_list media_players/
+notify: !include_dir_list notifications/
+sensor: !include_dir_list sensors/
+switch: !include_dir_list switches/
+zone: !include_dir_list zones/

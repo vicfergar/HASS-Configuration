@@ -1,0 +1,8 @@
+﻿platform: mqtt
+name: rafa_blitzwolf_voltage
+state_topic: tele/rafa_blitzwolf/SENSOR
+value_template: '{{value_json["ENERGY"]["Voltage"]}}'
+availability_topic: tele/rafa_blitzwolf/LWT
+payload_available: Online
+payload_not_available: Offline
+unit_of_measurement: "V"

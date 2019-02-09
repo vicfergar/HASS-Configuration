@@ -1,0 +1,3 @@
+platform: webostv
+host: !secret victor_tv_ip
+name: victor_tv

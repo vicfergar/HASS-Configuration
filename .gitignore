@@ -1,0 +1,26 @@
+
+# Ignore hidden files and folders.
+.storage
+.cloud
+.google.token
+.*
+
+# Whitelist files
+!.gitignore
+!.HA_VERSION
+
+# tts cache
+tts/
+
+# Python cache
+deps/
+__pycache__/
+*.pyc
+
+# Ensure these files are ignored, otherwise your secret data/credentials will leak.
+*.conf
+*.db*
+google_calendars.yaml
+ip_bans.yaml
+secrets.yaml
+known_devices.yaml

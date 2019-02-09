@@ -1,0 +1,9 @@
+platform: mqtt
+name: rafa_blitzwolf
+state_topic: "stat/rafa_blitzwolf/POWER"
+command_topic: "cmnd/rafa_blitzwolf/POWER"
+payload_on: "ON"
+payload_off: "OFF"
+availability_topic: tele/rafa_blitzwolf/LWT
+payload_available: Online
+payload_not_available: Offline

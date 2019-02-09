@@ -1,0 +1,6 @@
+platform: generic_thermostat
+name: rafa_climate
+heater: switch.rafa_s4
+target_sensor: sensor.rafa_ble_sensor_temperature
+max_temp: 26
+min_temp: 10

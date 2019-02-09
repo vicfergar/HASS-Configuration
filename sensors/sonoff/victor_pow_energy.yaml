@@ -1,0 +1,8 @@
+﻿platform: mqtt
+name: victor_pow_energy
+state_topic: stat/sonoff_pow/ENERGY
+value_template: "{{ value_json.Today }}"
+availability_topic: tele/sonoff_pow/LWT
+payload_available: Online
+payload_not_available: Offline
+unit_of_measurement: "kWh"

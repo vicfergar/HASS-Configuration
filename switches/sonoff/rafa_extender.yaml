@@ -1,0 +1,9 @@
+platform: mqtt
+name: rafa_extender
+state_topic: "stat/rafa_extra/POWER1"
+command_topic: "cmnd/rafa_extra/POWER1"
+payload_on: "ON"
+payload_off: "OFF"
+availability_topic: tele/rafa_extra/LWT
+payload_available: Online
+payload_not_available: Offline

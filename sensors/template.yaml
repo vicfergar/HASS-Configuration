@@ -1,0 +1,8 @@
+platform: template
+sensors:
+  weather_temperature:
+    value_template: "{{states.weather.home_weather.attributes['temperature']}}"
+    unit_of_measurement: '°C'
+  weather_humidity:
+    value_template: "{{states.weather.home_weather.attributes['humidity']}}"
+    unit_of_measurement: '%'

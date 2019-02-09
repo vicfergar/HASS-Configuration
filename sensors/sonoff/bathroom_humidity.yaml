@@ -1,0 +1,9 @@
+﻿platform: mqtt
+name: bathroom_humidity
+state_topic: tele/towel_warmer/SENSOR
+value_template: "{{ value_json['AM2301'].Humidity }}"
+availability_topic: tele/towel_warmer/LWT
+payload_available: Online
+payload_not_available: Offline
+qos: 0
+unit_of_measurement: '%'

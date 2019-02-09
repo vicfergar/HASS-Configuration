@@ -1,0 +1,7 @@
+platform: template
+sensors:
+  rafa_steam_link:
+    value_template: "{{ is_state('switch.rafa_steam_link', 'on') }}"
+    friendly_name: 'Rafa Steam Link'
+    entity_id:
+      - switch.rafa_steam_link

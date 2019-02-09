@@ -1,0 +1,40 @@
+platform: template
+covers:
+  livingroom_cover1:
+    position_template: "{{ states.sensor.position_livingroom_cover1.state | int }}"
+    open_cover:
+      service: mqtt.publish
+      data:
+        topic: 'cmnd/livingroom_cover1/shutteropen'
+    close_cover:
+      service: mqtt.publish
+      data:
+        topic: 'cmnd/livingroom_cover1/shutterclose'
+    stop_cover:
+      service: mqtt.publish
+      data:
+        topic: 'cmnd/livingroom_cover1/shutterstop'
+    set_cover_position:
+      service: mqtt.publish
+      data_template:
+        topic: 'cmnd/livingroom_cover1/shutterposition'
+        payload: '{{position}}'
+  victor_cover:
+    position_template: "{{ states.sensor.position_victor_cover.state | int }}"
+    open_cover:
+      service: mqtt.publish
+      data:
+        topic: 'cmnd/victor_cover/shutteropen'
+    close_cover:
+      service: mqtt.publish
+      data:
+        topic: 'cmnd/victor_cover/shutterclose'
+    stop_cover:
+      service: mqtt.publish
+      data:
+        topic: 'cmnd/victor_cover/shutterstop'
+    set_cover_position:
+      service: mqtt.publish
+      data_template:
+        topic: 'cmnd/victor_cover/shutterposition'
+        payload: '{{position}}'

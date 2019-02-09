@@ -1,0 +1,20 @@
+platform: mqtt
+name: victor_fan
+state_topic: "stat/victor_fan/RESULT"
+speed_state_topic: "stat/victor_fan/RESULT"
+state_value_template: "{% if value_json.FanSpeed == 0 -%}0{%- elif value_json.FanSpeed > 0 -%}1{%- endif %}" 
+speed_value_template: "{{ [[0, value_json.FanSpeed] | max, 3] | min }}"
+availability_topic: tele/victor_fan/LWT
+payload_available: Online
+payload_not_available: Offline
+speed_command_topic: "cmnd/victor_fan/FanSpeed"
+payload_low_speed: "1"
+payload_medium_speed: "2"
+payload_high_speed: "3"
+command_topic: "cmnd/victor_fan/FanSpeed"
+payload_off: "0"
+payload_on: "1"
+speeds:
+  - low
+  - medium
+  - high

@@ -1,0 +1,100 @@
+project_id: !secret google_assistant_project_id
+api_key: !secret google_assistant_api_key
+exposed_domains:
+  - switch
+  - light
+  - climate
+  - cover
+  - fan
+entity_config:
+  switch.bathroom_heater:
+    room: Baño
+  switch.towel_warmer:
+    room: Baño
+  climate.bathroom_climate:
+    expose: true
+    room: Baño
+  climate.livingroom_climate:
+    expose: true
+    room: Salón
+  switch.desktop_lamp:
+    room: Salón
+  cover.livingroom_cover1:
+    room: Salón
+  fan.livingroom_fan:
+    room: Salón
+  switch.livingroom_heater:
+    room: Salón
+  switch.nas:
+    room: Salón
+  switch.rafa_pc:
+    room: Salón
+  switch.rafa_pc_work:
+    room: Salón
+  switch.sofa_lamp:
+    room: Salón
+  switch.victor_monitor:
+    room: Salón
+  switch.victor_pc:
+    room: Salón
+  media_player.av_player:
+    expose: true
+    room: Habitación de Rafa
+  switch.rafa_fan:
+    room: Habitación de Rafa
+  switch.rafa_extender:
+    room: Habitación de Rafa
+  light.rafa_rgb_leds:
+    room: Habitación de Rafa
+  switch.rafa_broadlink_s1:
+    room: Habitación de Rafa
+  switch.rafa_broadlink_s2:
+    room: Habitación de Rafa
+  switch.rafa_broadlink_s3:
+    room: Habitación de Rafa
+  switch.rafa_broadlink_s4:
+    room: Habitación de Rafa
+  switch.rafa_s20:
+    room: Habitación de Rafa
+  switch.victor_bedside_lamp:
+    room: Habitacion de Victor
+  cover.victor_cover:
+    room: Habitacion de Victor
+  fan.victor_fan:
+    room: Habitacion de Victor
+  switch.victor_insecticide:
+    room: Habitacion de Victor
+  light.victor_rgbw_leds:
+    room: Habitacion de Victor
+  climate.victor_climate:
+    expose: true
+    room: Habitacion de Victor
+  media_player.victor_tv:
+    expose: true
+    room: Habitacion de Victor
+  script.open_entry_door:
+    expose: true
+    name: Entrance
+  switch.ledson:
+    expose: false
+  switch.livingroom_button:
+    expose: false
+  switch.livingroom_fan_light:
+    expose: false
+  switch.livingroom_projector:
+    expose: false
+  switch.rafa_steam_link:
+    expose: false
+  switch.victor_fan:
+    expose: false
+  switch.victor_heater:
+    expose: false
+  switch.victor_sonoff_pow:
+    expose: false
+  switch.victor_s2:
+    expose: false
+    room: Salón
+  switch.victor_sonoff:
+    expose: false
+  switch.victor_steam_link:
+    expose: false

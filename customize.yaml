@@ -1,0 +1,243 @@
+zone.home:
+  friendly_name: Casa
+zone.work:
+  friendly_name: Oficina
+  icon: mdi:worker
+camera.luis_de_morales:
+  friendly_name: Luis Montoto - Luis de Morales - Kansas City
+camera.santa_justa:
+  friendly_name: Santa Justa
+script.victor_climate_timer:
+  friendly_name: Climatizador 1h
+  icon: mdi:radiator
+script.towel_warmer_timer:
+  friendly_name: Toallero 1h
+  icon: mdi:radiator
+script.open_entry_door:
+  friendly_name: Abrir portal
+  icon: mdi:login
+weather.home_weather:
+  friendly_name: Clima
+sensor.bathroom_humidity:
+  friendly_name: Humedad
+  icon: mdi:water-percent
+sensor.bathroom_temperature:
+  friendly_name: Temperatura
+  icon: mdi:thermometer
+sensor.victor_bedroom_temperature:
+  friendly_name: Temperatura
+  icon: mdi:thermometer
+sensor.victor_bedroom_humidity:
+  friendly_name: Humedad
+  icon: mdi:water-percent
+sensor.laundry_state:
+  icon: mdi:washing-machine
+  friendly_name: Estado
+sensor.laundry_time:
+  icon: mdi:timelapse
+  friendly_name: Tiempo restante
+sensor.hass_db_size:
+  friendly_name: Tamaño BBDD
+  icon: mdi:database
+sensor.cpu_temperature:
+  friendly_name: Temperatura CPU
+sensor.gpu_temperature:
+  friendly_name: Temperatura GPU
+sensor.rpi_fan:
+  friendly_name: Ventilador CPU
+  icon: mdi:fan
+sensor.rpi_power_status:
+  friendly_name: Estado de carga
+sensor.hass_last_version:
+  friendly_name: Última versión disponible
+  icon: mdi:update
+sensor.processor_use:
+  friendly_name: Uso del procesador
+sensor.disk_free:
+  friendly_name: Espacio libre
+sensor.memory_use_percent:
+  friendly_name: Memoria en uso (porcentaje)
+sensor.db_size:
+  friendly_name: Tamaño BD
+  icon: mdi:database
+sensor.last_boot:
+  friendly_name: Último encendido
+sensor.installed_version:
+  friendly_name: Versión actual
+sensor.entry_door_last_call:
+  friendly_name: Útima llamada
+  icon: mdi:phone-in-talk
+sensor.main_voltage:
+  friendly_name: Voltaje
+sensor.main_current:
+  friendly_name: Intensidad
+sensor.main_power:
+  friendly_name: Potencia
+sensor.main_energy:
+  friendly_name: Energia hoy
+sensor.main_factor:
+  friendly_name: Factor de potencia
+sensor.rafa_blitzwolf_voltage:
+  friendly_name: Voltaje
+sensor.rafa_blitzwolf_current:
+  friendly_name: Intensidad
+sensor.rafa_blitzwolf_power:
+  friendly_name: Potencia
+sensor.rafa_blitzwolf_energy:
+  friendly_name: Energia hoy
+sensor.washing_machine_power:
+  friendly_name: Potencia
+sensor.washing_machine_energy:
+  friendly_name: Energia hoy
+sensor.victor_ble_sensor_battery:
+  friendly_name: BLE Victor
+  icon: mdi:battery-bluetooth-variant
+sensor.victor_ble_sensor_temperature:
+  friendly_name: Temperatura
+  icon: mdi:thermometer
+sensor.victor_ble_sensor_humidity:
+  friendly_name: Humedad
+  icon: mdi:water-percent
+sensor.rafa_ble_sensor_battery:
+  friendly_name: BLE Rafa
+  icon: mdi:battery-bluetooth-variant
+sensor.rafa_ble_sensor_temperature:
+  friendly_name: Temperatura
+  icon: mdi:thermometer
+sensor.rafa_ble_sensor_humidity:
+  friendly_name: Humedad
+  icon: mdi:water-percent
+sensor.livingroom_ble_sensor_battery:
+  friendly_name: BLE Salón
+  icon: mdi:battery-bluetooth-variant
+sensor.livingroom_ble_sensor_temperature:
+  friendly_name: Temperatura
+  icon: mdi:thermometer
+sensor.livingroom_ble_sensor_humidity:
+  friendly_name: Humedad
+  icon: mdi:water-percent
+sensor.ssl_certificate_expiry:
+  friendly_name: Expiración certificado SSL
+switch.bathroom_heater:
+  friendly_name: Calentador
+  icon: mdi:radiator
+switch.desktop_lamp:
+  friendly_name: Lámpara escritorio
+  icon: mdi:lightbulb
+switch.sofa_lamp:
+  friendly_name: Lámpara sofá
+  icon: mdi:lightbulb
+switch.livingroom_fan_light:
+  friendly_name: Lámpara ventilador
+  icon: mdi:lightbulb
+switch.towel_warmer:
+  friendly_name: Toallero
+  icon: mdi:radiator
+switch.washing_machine:
+  friendly_name: Lavadora
+  icon: mdi:washing-machine
+switch.livingroom_button:
+  hidden: true
+switch.livingroom_projector:
+  friendly_name: Proyector
+  icon: mdi:projector
+switch.livingroom_heater:
+  friendly_name: Radiador
+  icon: mdi:radiator
+switch.victor_s2:
+  friendly_name: Lampara escritorio 2
+  icon: mdi:lightbulb
+switch.rafa_fan:
+  friendly_name: Ventilador Rafa
+  icon: mdi:fan
+switch.rafa_extender:
+  friendly_name: Alargadora Rafa
+switch.rafa_ps4:
+  friendly_name: PS4
+  icon: mdi:xbox-controller
+switch.nas:
+  friendly_name: NAS
+  icon: mdi:server-network
+switch.s2:
+  icon: mdi:power-plug
+switch.rafa_broadlink_s1:
+  friendly_name: Lámpara estantería
+  icon: mdi:lightbulb
+switch.rafa_broadlink_s2:
+  friendly_name: S2
+  icon: mdi:power-plug
+switch.rafa_broadlink_s3:
+  friendly_name: S3
+  icon: mdi:power-plug
+switch.rafa_broadlink_s4:
+  friendly_name: S4
+  icon: mdi:power-plug
+switch.rafa_blitzwolf:
+  friendly_name: Blitzwolf
+  icon: mdi:power-plug
+switch.victor_monitor:
+  friendly_name: Monitor Víctor
+  icon: mdi:monitor-multiple
+switch.victor_pc:
+  friendly_name: PC Víctor
+  icon: mdi:desktop-tower
+switch.rafa_pc:
+  friendly_name: PC Rafa
+  icon: mdi:desktop-tower
+switch.rafa_pc_work:
+  friendly_name: PC trabajo Rafa
+  icon: mdi:laptop-windows
+switch.victor_steam_link:
+  friendly_name: Steam Link
+  icon: mdi:xbox-controller
+  hidden: true
+switch.rafa_steam_link:
+  friendly_name: Steam Link
+  icon: mdi:xbox-controller
+switch.victor_insecticide:
+  friendly_name: Insecticida
+  icon: mdi:bug
+switch.watering:
+  friendly_name: Riego
+  icon: mdi:water
+switch.victor_bedside_lamp:
+  friendly_name: Lámpara mesilla
+  icon: mdi:lamp
+switch.victor_sonoff_pow:
+  friendly_name: Víctor POW
+fan.victor_fan:
+  friendly_name: Ventilador Víctor
+fan.livingroom_fan:
+  friendly_name: Ventilador techo
+light.rafa_rgb_leds:
+  friendly_name: Luz ambiente Rafa
+light.victor_rgbw_leds:
+  friendly_name: Luz espejo
+media_player.av_player:
+  friendly_name: Decodificador A V
+media_player.victor_tv:
+  friendly_name: Televisor
+  icon: mdi:television-classic
+media_player.victor_bedroom_speaker:
+  friendly_name: Google Home
+  icon: mdi:google-home
+climate.victor_climate:
+  friendly_name: Climatizador Víctor
+climate.rafa_climate:
+  friendly_name: Climatizador Rafa
+cover.livingroom_cover1:
+  friendly_name: Persiana 1
+cover.victor_cover:
+  friendly_name: Persiana
+input_text.washing_machine_start_hour:
+  friendly_name: Hora comienzo lavadora
+sensor.home_assistant_v2_db:
+  friendly_name: Tamaño BD
+  icon: mdi:database
+climate.bathroom_climate:
+  friendly_name: Climatizador Baño
+climate.livingroom_climate:
+  friendly_name: Climatizador Salon
+switch.victor_heater:
+  friendly_name: Calentador
+  icon: mdi:radiator
