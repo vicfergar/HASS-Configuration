@@ -17,16 +17,6 @@ homeassistant:
   whitelist_external_dirs:
     - /config/
 
-# Enable the auth component
-#auth:
-
-# Enable Lovelace in xaml mode
-lovelace:
-  mode: yaml
-
-# Show links to resources in log and frontend
-#introduction:
-
 # Enables the frontend
 frontend:
   themes: !include_dir_merge_named themes

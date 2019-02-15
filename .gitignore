@@ -8,6 +8,7 @@
 # Whitelist files
 !.gitignore
 !.HA_VERSION
+!.storage/lovelace
 
 # tts cache
 tts/
