@@ -52,11 +52,11 @@ sensor.hass_last_version:
   friendly_name: Última versión disponible
   icon: mdi:update
 sensor.processor_use:
-  friendly_name: Uso del procesador
+  friendly_name: Procesador
 sensor.disk_free:
   friendly_name: Espacio libre
 sensor.memory_use_percent:
-  friendly_name: Memoria en uso (porcentaje)
+  friendly_name: Memoria
 sensor.db_size:
   friendly_name: Tamaño BD
   icon: mdi:database
@@ -241,3 +241,9 @@ climate.livingroom_climate:
 switch.victor_heater:
   friendly_name: Calentador
   icon: mdi:radiator
+sensor.tplink_router_kbytesec_received:
+  friendly_name: Descarga
+sensor.tplink_router_kbytesec_sent:
+  friendly_name: Subida
+device_tracker.192_168_1_128_04_d1_3a_6d_fd_37:
+  friendly_name: Mi Band Víctor - HVictor

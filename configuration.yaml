@@ -24,6 +24,9 @@ frontend:
 # Enables configuration UI
 config:
 
+# Enables System Health
+system_health:
+
 http:
   base_url: !secret http_base_url
   api_password: !secret http_password
@@ -76,6 +79,7 @@ sun:
 weather:
   - platform: darksky
     name: home_weather
+    mode: daily
     api_key: !secret darksky_api_key
 
 # Text to speech
@@ -86,6 +90,13 @@ tts:
 #google:
 #  client_id: !secret google_api_client_id
 #  client_secret: !secret google_api_client_secret
+
+person:
+
+googlehome:
+  devices:
+    - host: !secret victor_googlehome
+      track_alarms: true
 
 # GPS Presence detection
 device_tracker:
