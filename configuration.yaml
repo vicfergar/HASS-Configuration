@@ -93,6 +93,8 @@ tts:
 
 person:
 
+smartir:
+
 googlehome:
   devices:
     - host: !secret victor_googlehome
