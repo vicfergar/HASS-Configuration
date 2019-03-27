@@ -29,7 +29,6 @@ system_health:
 
 http:
   base_url: !secret http_base_url
-  api_password: !secret http_password
   ssl_certificate: !secret http_certificate
   ssl_key: !secret http_key
   trusted_networks:
@@ -105,7 +104,7 @@ device_tracker:
 #  - platform: bluetooth_tracker
   - platform: google_maps
     username: !secret google_shared_account
-    password: !secret http_password
+    password: !secret shared_password
 
 # Logs
 logger:
@@ -165,10 +164,10 @@ panel_iframe:
     title: Node-RED
     icon: mdi:sitemap
     url: !secret nodered_url
-  ide:
-    title: IDE
-    icon: mdi:code-braces
-    url: !secret ide_url
+  vscode:
+    title: VS Code
+    icon: mdi:visual-studio-code
+    url: !secret vs_code_url
   cctv:
     title: CCTV
     icon: mdi:cctv
