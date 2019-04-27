@@ -25,3 +25,4 @@ google_calendars.yaml
 ip_bans.yaml
 secrets.yaml
 known_devices.yaml
+node-red/flows_cred.json
