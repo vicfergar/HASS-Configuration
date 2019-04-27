@@ -1,6 +1,6 @@
 platform: smartir
 name: livingroom_climate
 device_code: 1283
-controller_send_service: switch.broadlink_send_packet_192_168_1_104
+controller_data: !secret victor_rm3_ip
 temperature_sensor: sensor.livingroom_ble_sensor_temperature
 humidity_sensor: sensor.livingroom_ble_sensor_humidity

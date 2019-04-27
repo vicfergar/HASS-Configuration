@@ -1,20 +1,4 @@
-platform: mqtt
+platform: smartir
 name: livingroom_fan
-state_topic: "stat/livingroom_fan/RESULT"
-speed_state_topic: "stat/livingroom_fan/RESULT"
-state_value_template: "{{ value_json.Power }}" 
-speed_value_template: "{{ [[0, value_json.FanSpeed] | max, 3] | min }}"
-availability_topic: tele/node_red/LWT
-payload_available: Online
-payload_not_available: Offline
-speed_command_topic: "cmnd/livingroom_fan/FanSpeed"
-payload_low_speed: "1"
-payload_medium_speed: "2"
-payload_high_speed: "3"
-command_topic: "cmnd/livingroom_fan/FanPower"
-payload_off: 'off'
-payload_on: 'on'
-speeds:
-  - low
-  - medium
-  - high
+device_code: 1080
+controller_data: !secret victor_rm3_ip

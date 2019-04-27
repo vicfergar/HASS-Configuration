@@ -1,0 +1,7 @@
+platform: mqtt
+name: ree_pvpc_noc
+state_topic: "tele/ree/pvpc/noc"
+unit_of_measurement: "€/MHh"
+availability_topic: tele/node_red/LWT
+payload_available: Online
+payload_not_available: Offline
