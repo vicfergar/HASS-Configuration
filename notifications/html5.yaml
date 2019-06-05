@@ -1,4 +1,5 @@
 platform: html5
 name: pisaso_gcm
-gcm_api_key: !secret notify_api_key
-gcm_sender_id: !secret notify_sender_id
+vapid_pub_key: !secret notify_vapid_pub_key
+vapid_prv_key: !secret notify_vapid_prv_key
+vapid_email: !secret google_shared_account
