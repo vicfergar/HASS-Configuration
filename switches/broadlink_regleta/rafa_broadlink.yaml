@@ -1,9 +1,0 @@
-﻿platform: broadlink
-host: !secret rafa_mp1_ip
-mac: !secret rafa_mp1_mac
-type: mp1
-slots:
-  slot_1: 'rafa_broadlink_s1'
-  slot_2: 'rafa_broadlink_s2'
-  slot_3: 'rafa_broadlink_s3'
-  slot_4: 'rafa_broadlink_s4'
