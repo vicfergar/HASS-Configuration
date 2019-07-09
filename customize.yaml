@@ -30,11 +30,9 @@ sensor.victor_bedroom_temperature:
 sensor.victor_bedroom_humidity:
   friendly_name: Humedad
   icon: mdi:water-percent
-sensor.laundry_state:
-  icon: mdi:washing-machine
+sensor.washing_state:
   friendly_name: Estado
-sensor.laundry_time:
-  icon: mdi:timelapse
+sensor.washing_remaining:
   friendly_name: Tiempo restante
 sensor.hass_db_size:
   friendly_name: Tamaño BBDD

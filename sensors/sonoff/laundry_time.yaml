@@ -1,7 +1,0 @@
-﻿platform: mqtt
-name: laundry_time
-state_topic: stat/laundry/LAUNDRY
-value_template: "{% if value_json.RemainingSec | int >= 0 %} {{ ((value_json.RemainingSec | int) / 60) | int }}m {{ (value_json.RemainingSec | int) % 60 }}s{% else %}-{% endif %}"
-availability_topic: tele/laundry/LWT
-payload_available: Online
-payload_not_available: Offline
