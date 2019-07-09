@@ -67,15 +67,24 @@ binary_sensor:
               topic: 'livingroom_touch/binary_sensor/livingroom_button/single_short_click'
               payload: 'fired'
           - logger.log: "Single Short Clicked"
-          - switch.toggle: led_indicator
-    
-switch:
+          - light.toggle: led_indicator
+
+output:
   - platform: gpio
     pin: GPIO13
     inverted: yes
-    id: "led_indicator"
-    name: "livingroom_led_indicator"
+    id: led
 
   - platform: gpio
     pin: GPIO12
+    id: relay
+    
+light:
+  - platform: binary
+    output: led
+    id: led_indicator
+    name: "livingroom_led_indicator"
+
+  - platform: binary
+    output: relay
     name: "livingroom_table_light"

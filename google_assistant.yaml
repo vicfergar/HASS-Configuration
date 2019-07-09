@@ -77,11 +77,9 @@ entity_config:
     name: Entrance
   switch.ledson:
     expose: false
-  switch.livingroom_button:
+  light.livingroom_led_indicator:
     expose: false
   switch.livingroom_fan_light:
-    expose: false
-  switch.livingroom_projector:
     expose: false
   switch.rafa_steam_link:
     expose: false

@@ -213,6 +213,8 @@ light.rafa_rgb_leds:
   friendly_name: Luz ambiente Rafa
 light.victor_rgbw_leds:
   friendly_name: Luz espejo
+light.livingroom_table_light:
+  friendly_name: Lámpara comedor
 media_player.av_player:
   friendly_name: Decodificador A V
 media_player.victor_tv:
