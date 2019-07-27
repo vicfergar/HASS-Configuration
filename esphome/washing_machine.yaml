@@ -34,7 +34,7 @@ sensor:
     update_interval: 1s
     accuracy_decimals: 0
     filters:
-      - throttle: 0.5s
+      - throttle: 2s
     on_value_range:
       - below: 10
         then:
@@ -53,7 +53,7 @@ sensor:
     update_interval: 1s
     accuracy_decimals: 0
     filters:
-      - throttle: 0.5s
+      - throttle: 2s
     on_value_range:
       - below: 10
         then:
@@ -72,7 +72,7 @@ sensor:
     update_interval: 1s
     accuracy_decimals: 0
     filters:
-      - throttle: 0.5s
+      - throttle: 2s
     on_value_range:
       - below: 10
         then:
@@ -91,7 +91,7 @@ sensor:
     update_interval: 1s
     accuracy_decimals: 0
     filters:
-      - throttle: 0.5s
+      - throttle: 2s
     on_value_range:
       - below: 10
         then:
@@ -110,7 +110,7 @@ sensor:
     update_interval: 1s
     accuracy_decimals: 0
     filters:
-      - throttle: 0.5s
+      - throttle: 2s
     on_value_range:
       - below: 10
         then:
