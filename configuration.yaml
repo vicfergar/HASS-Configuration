@@ -84,6 +84,7 @@ weather:
 # Text to speech
 tts:
   - platform: google_translate
+    language: 'es'
     service_name: google_say
 
 # Google Calendar API
@@ -94,6 +95,10 @@ tts:
 person:
 
 smartir:
+
+custom_updater:
+  card_urls:
+    - https://raw.githubusercontent.com/kalkih/mini-media-player/master/tracker.json
 
 googlehome:
   devices:
