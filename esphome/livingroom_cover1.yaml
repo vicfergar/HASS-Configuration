@@ -1,0 +1,66 @@
+esphome:
+  name: livingroom_cover1
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: "admin"
+  password: "Rafael87Victor89"
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+binary_sensor:
+- platform: gpio
+  pin:
+    number: GPIO14
+    inverted: true
+  id: switch_close
+  on_press:
+    then:
+      - cover.stop: my_cover
+      - cover.close: my_cover
+  on_release:
+    then:
+      - cover.stop: my_cover
+- platform: gpio
+  pin:
+    number: GPIO4
+    inverted: true
+  id: switch_open
+  on_press:
+    then:
+      - cover.stop: my_cover
+      - cover.open: my_cover
+  on_release:
+    then:
+      - cover.stop: my_cover
+
+output:
+- platform: gpio
+  pin: GPIO13
+  id: power_cover
+- platform: gpio
+  pin: GPIO5
+  id: direc_cover
+
+cover:
+- platform: time_based
+  name: "livingroom_cover1"
+  id: my_cover
+  open_action:
+    - output.turn_on: power_cover
+    - output.turn_off: direc_cover
+  open_duration: 17s
+  close_action:
+    - output.turn_on: power_cover
+    - output.turn_on: direc_cover
+  close_duration: 16s
+  stop_action:
+    - output.turn_off: power_cover
+    - output.turn_off: direc_cover
