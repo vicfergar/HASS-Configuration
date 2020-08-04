@@ -1,4 +1,0 @@
-﻿platform: mqtt
-name: position_livingroom_cover1
-state_topic: "stat/livingroom_cover1/SHUTTERPOSITION1"
-unit_of_measurement: "%"

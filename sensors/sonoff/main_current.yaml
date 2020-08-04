@@ -1,8 +1,0 @@
-﻿platform: mqtt
-name: main_current
-state_topic: "tele/main_wattmeter/SENSOR"
-value_template: "{{ value_json.ENERGY.Current }}"
-availability_topic: tele/main_wattmeter/LWT
-payload_available: Online
-payload_not_available: Offline
-unit_of_measurement: "A"

@@ -1,9 +1,0 @@
-platform: mqtt
-name: victor_heater
-state_topic: "stat/victor_heater/POWER1"
-command_topic: "cmnd/victor_heater/POWER1"
-payload_on: "ON"
-payload_off: "OFF"
-availability_topic: tele/victor_heater/LWT
-payload_available: Online
-payload_not_available: Offline

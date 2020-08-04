@@ -1,0 +1,64 @@
+substitutions:
+  hostname: victor_s20_1
+  upper_hostname: "Insecticida"
+
+esphome:
+  name: $hostname
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: $hostname
+    password: "5VsLH03EpOZM"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: yes
+    
+sensor:
+  - platform: wifi_signal
+    name: "$upper_hostname WiFi Signal"
+    update_interval: 60s
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    id: button
+    on_press:
+      - switch.toggle: relay
+
+script:
+  - id: timer_off
+    then:
+    - delay: 6h
+    - switch.turn_off: relay
+
+switch:
+  - platform: gpio
+    name: $upper_hostname
+    icon: mdi:bug-outline
+    pin: GPIO12
+    id: relay
+    on_turn_on:
+      - script.execute: timer_off
+    on_turn_off:
+      - script.stop: timer_off

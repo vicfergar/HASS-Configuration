@@ -1,8 +1,0 @@
-﻿platform: mqtt
-name: victor_bedroom_humidity
-state_topic: tele/victor_heater/DHT/HUMIDITY
-availability_topic: tele/victor_heater/LWT
-payload_available: Online
-payload_not_available: Offline
-qos: 0
-unit_of_measurement: '%'

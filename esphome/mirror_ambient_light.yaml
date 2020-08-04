@@ -1,0 +1,382 @@
+substitutions:
+  hostname: mirror_ambient_light
+  upper_hostname: "Mirror Light"
+
+esphome:
+  name: $hostname
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: $hostname
+    password: "5VsLH03EpOZM"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+web_server:
+  port: 80
+
+status_led:
+  pin:
+    number: GPIO2
+    inverted: yes
+    
+sensor:
+  - platform: wifi_signal
+    name: "$upper_hostname WiFi Signal"
+    update_interval: 60s
+
+output:
+  - platform: esp8266_pwm
+    id: output_g
+    pin: GPIO5
+  - platform: esp8266_pwm
+    id: output_r
+    pin: GPIO14
+  - platform: esp8266_pwm
+    id: output_b
+    pin: GPIO12
+  - platform: esp8266_pwm
+    id: output_w
+    pin: GPIO13
+
+light:
+  - platform: rgbw
+    name: "$upper_hostname"
+    id: light_1
+    red: output_r
+    green: output_g
+    blue: output_b
+    white: output_w
+    effects:
+      - random:
+          name: Flash
+          transition_length: 0s
+          update_interval: 0.25s
+      - lambda:
+          name: Strobe
+          update_interval: 1s
+          lambda: |-
+            static bool state = true;
+            auto call = state ? id(light_1).turn_on() : id(light_1).turn_off();
+            call.set_transition_length(500);
+            call.perform();
+            state = !state;
+      - flicker:
+    
+remote_receiver:
+  pin:
+    number: GPIO4
+    inverted: yes
+  dump: nec
+  
+binary_sensor:
+  - platform: remote_receiver
+    id: bright_up
+    panasonic:
+      address: 0x00FF
+      command: 0x906F
+    on_press:
+      - light.dim_relative:
+          id: light_1
+          relative_brightness: 5%
+  - platform: remote_receiver
+    id: bright_down
+    nec:
+      address: 0x00FF
+      command: 0xB847
+    on_press:
+      - light.dim_relative:
+          id: light_1
+          relative_brightness: -5%
+  - platform: remote_receiver
+    id: turn_off
+    nec:
+      address: 0x00FF
+      command: 0xF807
+    on_press:
+      - light.turn_off: light_1
+  - platform: remote_receiver
+    id: turn_on
+    nec:
+      address: 0x00FF
+      command: 0xB04F
+    on_press:
+      - light.turn_on: light_1
+  - platform: remote_receiver
+    id: color_red
+    nec:
+      address: 0x00FF
+      command: 0x9867
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: none
+          red: 100%
+          green: 0%
+          blue: 0%
+          white: 0%
+  - platform: remote_receiver
+    id: color_r1
+    nec:
+      address: 0x00FF
+      command: 0xE817
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: none
+          red: 100%
+          green: 25%
+          blue: 0%
+          white: 0%
+  - platform: remote_receiver
+    id: color_r2
+    nec:
+      address: 0x00FF
+      command: 0x02FD
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: none
+          red: 100%
+          green: 50%
+          blue: 0%
+          white: 0%
+  - platform: remote_receiver
+    id: color_r3
+    nec:
+      address: 0x00FF
+      command: 0x50AF
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: none
+          red: 100%
+          green: 75%
+          blue: 0%
+          white: 0%
+  - platform: remote_receiver
+    id: color_r4
+    nec:
+      address: 0x00FF
+      command: 0x38C7
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: none
+          red: 100%
+          green: 100%
+          blue: 0%
+          white: 0%
+  - platform: remote_receiver
+    id: color_green
+    nec:
+      address: 0x00FF
+      command: 0xD827
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: none
+          red: 0%
+          green: 100%
+          blue: 0%
+          white: 0%
+  - platform: remote_receiver
+    id: color_g1
+    nec:
+      address: 0x00FF
+      command: 0x48B7
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: none
+          red: 0%
+          green: 100%
+          blue: 50%
+          white: 0%
+  - platform: remote_receiver
+    id: color_g2
+    nec:
+      address: 0x00FF
+      command: 0x32CD
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: none
+          red: 0%
+          green: 100%
+          blue: 100%
+          white: 0%
+  #- platform: remote_receiver
+  #  id: color_g3
+  #  nec:
+  #    address: 0x00FF
+  #    command: 0x7887
+  #  on_press:
+  #    - light.control:
+  #        id: light_1
+  #        state: on
+  #        effect: none
+  #        red: 0%
+  #        green: 100%
+  #        blue: 100%
+  #        white: 0%
+  #- platform: remote_receiver
+  #  id: color_g3
+  #  nec:
+  #    address: 0x00FF
+  #    command: 0x28D7
+  #  on_press:
+  #    - light.control:
+  #        id: light_1
+  #        state: on
+  #        effect: none
+  #        red: 0%
+  #        green: 100%
+  #        blue: 100%
+  #        white: 0%
+  - platform: remote_receiver
+    id: color_blue
+    nec:
+      address: 0x00FF
+      command: 0x8877
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: none
+          red: 0%
+          green: 0%
+          blue: 100%
+          white: 0%
+  - platform: remote_receiver
+    id: color_b1
+    nec:
+      address: 0x00FF
+      command: 0x6897
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: none
+          red: 0%
+          green: 50%
+          blue: 100%
+          white: 0%
+  - platform: remote_receiver
+    id: color_b2
+    nec:
+      address: 0x00FF
+      command: 0x20DF
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: none
+          red: 50%
+          green: 0%
+          blue: 100%
+          white: 0%
+  - platform: remote_receiver
+    id: color_b3
+    nec:
+      address: 0x00FF
+      command: 0x708F
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: none
+          red: 75%
+          green: 0%
+          blue: 100%
+          white: 0%
+  - platform: remote_receiver
+    id: color_b4
+    nec:
+      address: 0x00FF
+      command: 0xF00F
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: none
+          red: 100%
+          green: 0%
+          blue: 100%
+          white: 0%
+  - platform: remote_receiver
+    id: color_white
+    nec:
+      address: 0x00FF
+      command: 0xA857
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: none
+          red: 0%
+          green: 0%
+          blue: 0%
+          white: 100%
+  - platform: remote_receiver
+    id: flash
+    nec:
+      address: 0x00FF
+      command: 0xB24D
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: flash
+  - platform: remote_receiver
+    id: strobe
+    nec:
+      address: 0x00FF
+      command: 0x00FF
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: strobe
+  - platform: remote_receiver
+    id: fade
+    nec:
+      address: 0x00FF
+      command: 0x58A7
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: fade
+  - platform: remote_receiver
+    id: smooth
+    nec:
+      address: 0x00FF
+      command: 0x30CF
+    on_press:
+      - light.control:
+          id: light_1
+          state: on
+          effect: smooth

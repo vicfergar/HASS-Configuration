@@ -1,9 +1,0 @@
-﻿platform: mqtt
-name: bathroom_temperature
-state_topic: tele/towel_warmer/SENSOR
-value_template: "{{ value_json['AM2301'].Temperature }}"
-availability_topic: tele/towel_warmer/LWT
-payload_available: Online
-payload_not_available: Offline
-qos: 0
-unit_of_measurement: '°C'

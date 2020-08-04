@@ -1,23 +1,27 @@
+substitutions:
+  hostname: "livingroom_touch"
+
 esphome:
-  name: livingroom_touch
+  name: $hostname
   platform: ESP8266
   board: esp01_1m
 
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  
-mqtt:
-  broker: !secret mqtt_broker
-  username: !secret mqtt_user
-  password: !secret mqtt_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: $hostname
+    password: "5VsLH03EpOZM"
+
+captive_portal:
 
 # Enable logging
 logger:
 
 # Enable Home Assistant API
 api:
-  reboot_timeout: 0s
 
 ota:
     
@@ -31,43 +35,75 @@ binary_sensor:
     on_multi_click:
       - timing:
           - ON for at most 1s
-          - OFF for at most 1s
+          - OFF for at most 0.5s
           - ON for at most 1s
-          - OFF for at most 1s
+          - OFF for at most 0.5s
           - ON for at most 1s
           - OFF for at least 0.2s
         then:
-          - mqtt.publish:
-              topic: 'livingroom_touch/binary_sensor/livingroom_button/triple_click'
-              payload: 'fired'
           - logger.log: "Triple Clicked"
+          - light.toggle: led_indicator
+          - delay: 0.2s
+          - light.toggle: led_indicator
+          - delay: 0.2s
+          - light.toggle: led_indicator
+          - delay: 0.2s
+          - light.toggle: led_indicator
+          - delay: 0.2s
+          - light.toggle: led_indicator
+          - delay: 0.2s
+          - light.toggle: led_indicator
+          - delay: 0.2s
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: $hostname
+                type: triple
       - timing:
           - ON for at most 1s
-          - OFF for at most 1s
+          - OFF for at most 0.5s
           - ON for at most 1s
           - OFF for at least 0.2s
         then:
-          - mqtt.publish:
-              topic: 'livingroom_touch/binary_sensor/livingroom_button/double_click'
-              payload: 'fired'
           - logger.log: "Double Clicked"
+          - light.toggle: led_indicator
+          - delay: 0.2s
+          - light.toggle: led_indicator
+          - delay: 0.2s
+          - light.toggle: led_indicator
+          - delay: 0.2s
+          - light.toggle: led_indicator
+          - delay: 0.2s
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: $hostname
+                type: double
       - timing:
-          - ON for at least 1s
-          - OFF for at least 0.5s
+          - ON for at least 2s
         then:
-          - mqtt.publish:
-              topic: 'livingroom_touch/binary_sensor/livingroom_button/single_long_click'
-              payload: 'fired'
           - logger.log: "Single Long Clicked"
+          - light.toggle: led_indicator
+          - delay: 0.2s
+          - light.toggle: led_indicator
+          - delay: 0.2s
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: $hostname
+                type: single_long
       - timing:
           - ON for at most 1s
           - OFF for at least 0.5s
         then:
-          - mqtt.publish:
-              topic: 'livingroom_touch/binary_sensor/livingroom_button/single_short_click'
-              payload: 'fired'
           - logger.log: "Single Short Clicked"
           - light.toggle: led_indicator
+          - delay: 0.1s
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: $hostname
+                type: single_short
 
 output:
   - platform: gpio

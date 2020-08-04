@@ -1,5 +1,0 @@
-platform: mqtt
-name: sofa_lamp
-state_topic: rafa_ikea_lamp/switch/sonoff_basic_relay/state
-command_topic: rafa_ikea_lamp/switch/sonoff_basic_relay/command
-availability_topic: rafa_ikea_lamp/status

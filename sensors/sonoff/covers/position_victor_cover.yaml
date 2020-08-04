@@ -1,5 +1,0 @@
-﻿platform: mqtt
-name: position_victor_cover
-state_topic: "tele/victor_cover/SENSOR"
-value_template: "{{ value_json['SHUTTER-0'] }}"
-unit_of_measurement: "%"
