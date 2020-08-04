@@ -1,9 +1,0 @@
-﻿platform: broadlink
-host: !secret rafa_rm3_ip
-mac: !secret rafa_rm3_mac
-type: rm_mini
-switches:
-  ledson:
-    friendly_name: "Example"
-    command_on: "JgBQAAABJ5MTEhMRFBERFBETExMTEhMRFDYTNhM2EzgTERQ2EzYTNhU2EzYTEhMRFBITERQRFBETEhMREjgTNhQ2EjgTNhM2FAAFPQABJ0kSAA0FAAAAAAAAAAA="
-    command_off: "JgBQAAABJJUSExEUERQRFBETEhMRFBETEjgRORA5EjgRExI4EjgROBEUEjcSExITEhMRFBAVERMSOBISEjgRORE4EjgROBI4EgAFPgABJUwRAA0FAAAAAAAAAAA="

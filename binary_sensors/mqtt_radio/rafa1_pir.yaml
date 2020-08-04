@@ -1,7 +1,0 @@
-platform: mqtt
-name: rafa1_pir
-state_topic: "tele/sonoff_bridge/RESULT"
-payload_on: "0D650A"
-off_delay: 2 
-device_class: motion
-value_template: '{{ value_json.RfReceived.Data }}'

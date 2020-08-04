@@ -1,4 +1,0 @@
-platform: wake_on_lan
-name: rafa_steam_link
-mac_address: !secret rafa_steam_mac
-host: !secret rafa_steam_ip

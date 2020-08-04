@@ -1,4 +1,0 @@
-platform: wake_on_lan
-name: rafa_pc
-mac_address: !secret rafa_pc_mac
-host: !secret rafa_pc_ip

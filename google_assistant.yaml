@@ -25,37 +25,12 @@ entity_config:
     room: Salón
   switch.livingroom_heater:
     room: Salón
-  switch.nas:
-    room: Salón
-  switch.rafa_pc:
-    room: Salón
-  switch.rafa_pc_work:
-    room: Salón
   switch.sofa_lamp:
     room: Salón
   switch.victor_monitor:
     room: Salón
   switch.victor_pc:
     room: Salón
-  media_player.av_player:
-    expose: true
-    room: Habitación de Rafa
-  switch.rafa_fan:
-    room: Habitación de Rafa
-  switch.rafa_extender:
-    room: Habitación de Rafa
-  light.rafa_rgb_leds:
-    room: Habitación de Rafa
-  switch.rafa_broadlink_s1:
-    room: Habitación de Rafa
-  switch.rafa_broadlink_s2:
-    room: Habitación de Rafa
-  switch.rafa_broadlink_s3:
-    room: Habitación de Rafa
-  switch.rafa_broadlink_s4:
-    room: Habitación de Rafa
-  switch.rafa_s20:
-    room: Habitación de Rafa
   switch.victor_bedside_lamp:
     room: Habitacion de Victor
   cover.victor_cover:
@@ -80,8 +55,6 @@ entity_config:
   light.livingroom_led_indicator:
     expose: false
   switch.livingroom_fan_light:
-    expose: false
-  switch.rafa_steam_link:
     expose: false
   switch.victor_fan:
     expose: false

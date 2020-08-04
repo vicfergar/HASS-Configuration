@@ -1,5 +1,0 @@
-﻿platform: broadlink_mp1
-host: !secret rafa_mp1_ip
-mac: !secret rafa_mp1_mac
-type: mp11
-friendly_name: 'rafa_broadlink_s1'
