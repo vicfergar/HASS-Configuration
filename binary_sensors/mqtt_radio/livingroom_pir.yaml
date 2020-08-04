@@ -1,7 +1,0 @@
-platform: mqtt
-name: livingroom_pir
-state_topic: "tele/sonoff_bridge/RESULT"
-payload_on: "D4600A"
-off_delay: 2 
-device_class: motion
-value_template: '{{ value_json.RfReceived.Data }}'

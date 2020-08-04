@@ -1,0 +1,573 @@
+substitutions:
+  hostname: sonoff_rf_bridge
+  upper_hostname: "Sonoff RF Bridge"
+  delayed_off: 100ms
+  delayed_off_motion: 5s
+
+esphome:
+  name: $hostname
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: $hostname
+    password: "5VsLH03EpOZM"
+
+captive_portal:
+
+# Enable logging
+logger:
+  baud_rate: 0
+
+# Enable Home Assistant API
+api:
+  services:
+    - service: send_rf_code
+      variables:
+        sync: int
+        low: int
+        high: int
+        code: int
+      then:
+        - rf_bridge.send_code:
+            sync: !lambda 'return sync;'
+            low: !lambda 'return low;'
+            high: !lambda 'return high;'
+            code: !lambda 'return code;'
+    - service: learn
+      then:
+        - rf_bridge.learn
+
+ota:
+
+web_server:
+  port: 80
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: yes
+
+remote_receiver:
+  pin: GPIO4
+  dump: rc_switch
+  tolerance: 50%
+  filter: 100us
+  idle: 2ms
+  
+globals:
+  - id: light_fan_lab_state
+    type: bool
+  - id: fan_lab_ignore_write
+    type: bool
+
+uart:
+  tx_pin: GPIO1
+  rx_pin: GPIO3
+  baud_rate: 19200
+  
+rf_bridge:
+  on_code_received:
+    - if:
+        condition:
+          lambda: 'return data.code == 0xFD013C;'
+        then:
+          - lambda: 'id(light_fan_lab_state) = false;'
+          - lambda: 'id(fan_lab_ignore_write) = true;'
+          - fan.turn_off: lab_fan
+    - if:
+        condition:
+          lambda: 'return data.code == 0xFD0103;'
+        then:
+          lambda: 'id(light_fan_lab_state) = false;'
+    - if:
+        condition:
+          lambda: 'return data.code == 0xFD010C;'
+        then:
+          lambda: 'id(light_fan_lab_state) = true;'
+    - if:
+        condition:
+          lambda: 'return data.code == 0xFD0130;' # OFF
+        then:
+          - lambda: 'id(fan_lab_ignore_write) = true;'
+          - fan.turn_off: lab_fan
+    - if:
+        condition:
+          lambda: 'return data.code == 0xFD01F3;' # LOW
+        then:
+          - lambda: 'id(fan_lab_ignore_write) = true;'
+          - fan.turn_on:
+              id: lab_fan
+              speed: LOW
+    - if:
+        condition:
+          lambda: 'return data.code == 0xFD0133;' # MED
+        then:
+          - lambda: 'id(fan_lab_ignore_write) = true;'
+          - fan.turn_on:
+              id: lab_fan
+              speed: MEDIUM
+    - if:
+        condition:
+          lambda: 'return data.code == 0xFD01CC;' # HIGH
+        then:
+          - lambda: 'id(fan_lab_ignore_write) = true;'
+          - fan.turn_on:
+              id: lab_fan
+              speed: HIGH
+    - homeassistant.event:
+        event: esphome.rf_code_received
+        data:
+          sync: !lambda 'char buffer [10];return itoa(data.sync,buffer,16);'
+          low: !lambda 'char buffer [10];return itoa(data.low,buffer,16);'
+          high: !lambda 'char buffer [10];return itoa(data.high,buffer,16);'
+          code: !lambda 'char buffer [10];return itoa(data.code,buffer,16);'
+  
+sensor:
+  - platform: uptime
+    name: "$upper_hostname Uptime Sensor"
+
+switch:
+  - platform: template
+    name: 'Fan light lab'
+    id: light_fan_lab
+    icon: mdi:lightbulb
+    lambda: 'return id(light_fan_lab_state);'
+    turn_on_action:
+      - lambda: 'id(light_fan_lab_state) = true;'
+      - rf_bridge.send_code:
+          sync: 0x1C7A
+          low: 0x00FA
+          high: 0x02DA
+          code: 0xFD010C
+    turn_off_action:
+      - lambda: 'id(light_fan_lab_state) = false;'
+      - rf_bridge.send_code:
+          sync: 0x1C8E
+          low: 0x00FA
+          high: 0x02DA
+          code: 0xFD0103
+fan:
+  - platform: speed
+    output: lab_fan_output
+    id: lab_fan
+    name: "Lab Fan"
+          
+output:
+  - platform: template
+    id: lab_fan_output
+    type: float
+    write_action:
+      - if:
+          condition:
+            lambda: 'return id(fan_lab_ignore_write);'
+          then:
+            lambda: 'id(fan_lab_ignore_write) = false;'
+          else:
+            - if:
+                condition:
+                  lambda: return state == 0; # STOP
+                then:
+                  - rf_bridge.send_code:
+                      sync: 0x1CA2
+                      low: 0x00FA
+                      high: 0x02DA
+                      code: 0xFD0130
+            - if:
+                condition:
+                  lambda: return ((state > 0) && (state < .4)); # LOW
+                then:
+                  - rf_bridge.send_code:
+                      sync: 0x1CA2
+                      low: 0x00FA
+                      high: 0x02DA
+                      code: 0xFD01F3
+            - if:
+                condition:
+                  lambda: return ((state > 0.4) && (state < .7)); # MED
+                then:
+                  - rf_bridge.send_code:
+                      sync: 0x1C98
+                      low: 0x00FA
+                      high: 0x02DA
+                      code: 0xFD0133
+            - if:
+                condition:
+                  lambda: return state > 0.8; # HIGH
+                then:
+                  - rf_bridge.send_code:
+                      sync: 0x1C8E
+                      low: 0x00FA
+                      high: 0x02DA
+                      code: 0xFD01CC
+  
+binary_sensor:
+
+  #Bedroom Push Button
+  - platform: remote_receiver
+    id: PushButton11
+    rc_switch_raw:
+      code: '001101100000110000100010'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+    on_multi_click:
+      - timing:
+          - ON for at least 2s
+        then:
+          - logger.log: "Single Long Clicked"
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: ${hostname} Switch11
+                type: single_long
+      - timing:
+          - ON for at most 1s
+          - OFF for at least 0.5s
+        then:
+          - logger.log: "Single Short Clicked"
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: ${hostname} Switch11
+                type: single_short
+  - platform: remote_receiver
+    id: PushButton12
+    rc_switch_raw:
+      code: '001101100000110000100100'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+    on_multi_click:
+      - timing:
+          - ON for at least 2s
+        then:
+          - logger.log: "Single Long Clicked"
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: ${hostname} Switch12
+                type: single_long
+      - timing:
+          - ON for at most 1s
+          - OFF for at least 0.5s
+        then:
+          - logger.log: "Single Short Clicked"
+          - fan.toggle: lab_fan
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: ${hostname} Switch12
+                type: single_short
+  - platform: remote_receiver
+    id: PushButton13
+    rc_switch_raw:
+      code: '001101100000110000101000'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+    on_multi_click:
+      - timing:
+          - ON for at least 2s
+        then:
+          - logger.log: "Single Long Clicked"
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: ${hostname} Switch13
+                type: single_long
+      - timing:
+          - ON for at most 1s
+          - OFF for at least 0.5s
+        then:
+          - logger.log: "Single Short Clicked"
+          - switch.toggle: light_fan_lab
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: ${hostname} Switch13
+                type: single_short
+           
+  #Livingroom Push Button
+  #- platform: remote_receiver
+  #  id: PushButton21
+  #  rc_switch_raw:
+  #    code: '001100010001101000100010'
+  #    protocol: 1
+  #  filters:
+  #    delayed_off: $delayed_off
+  #  on_multi_click:
+  #    - timing:
+  #        - ON for at least 2s
+  #      then:
+  #        - logger.log: "Single Long Clicked"
+  #        - homeassistant.event:
+  #            event: esphome.button_pressed
+  #            data:
+  #              source: ${hostname} Switch21
+  #              type: single_long
+  #    - timing:
+  #        - ON for at most 1s
+  #        - OFF for at least 0.5s
+  #      then:
+  #        - logger.log: "Single Short Clicked"
+  #        - homeassistant.event:
+  #            event: esphome.button_pressed
+  #            data:
+  #              source: ${hostname} Switch21
+  #              type: single_short
+  #- platform: remote_receiver
+  #  id: PushButton22
+  #  rc_switch_raw:
+  #    code: '001100010001101000100100'
+  #    protocol: 1
+  #  filters:
+  #    delayed_off: $delayed_off
+  #  on_multi_click:
+  #    - timing:
+  #        - ON for at least 2s
+  #      then:
+  #        - logger.log: "Single Long Clicked"
+  #        - homeassistant.event:
+  #            event: esphome.button_pressed
+  #            data:
+  #              source: ${hostname} Switch22
+  #              type: single_long
+  #    - timing:
+  #        - ON for at most 1s
+  #        - OFF for at least 0.5s
+  #      then:
+  #        - logger.log: "Single Short Clicked"
+  #        - homeassistant.event:
+  #            event: esphome.button_pressed
+  #            data:
+  #              source: ${hostname} Switch22
+  #              type: single_short
+  #- platform: remote_receiver
+  #  id: PushButton23
+  #  rc_switch_raw:
+  #    code: '001100010001101000101000'
+  #    protocol: 1
+  #  filters:
+  #    delayed_off: $delayed_off
+  #  on_multi_click:
+  #    - timing:
+  #        - ON for at least 2s
+  #      then:
+  #        - logger.log: "Single Long Clicked"
+  #        - homeassistant.event:
+  #            event: esphome.button_pressed
+  #            data:
+  #              source: ${hostname} Switch23
+  #              type: single_long
+  #    - timing:
+  #        - ON for at most 1s
+  #        - OFF for at least 0.5s
+  #      then:
+  #        - logger.log: "Single Short Clicked"
+  #        - homeassistant.event:
+  #            event: esphome.button_pressed
+  #            data:
+  #              source: ${hostname} Switch23
+  #              type: single_short   
+  #
+  #Livingroom Motion
+  - platform: remote_receiver
+    name: "Livingroom Motion"
+    device_class: motion
+    rc_switch_raw:
+      code: '110101000110000000001010'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off_motion
+
+  - platform: remote_receiver
+    name: "Livingroom Motion Battery"
+    device_class: battery
+    rc_switch_raw:
+      code: '110101000110000000001111'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+      
+  #Bathroom Motion
+  - platform: remote_receiver
+    name: "Bathroom Motion"
+    device_class: motion
+    rc_switch_raw:
+      code: '001101100110010000001010'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off_motion
+
+  #Bathroom Motion Battery
+  - platform: remote_receiver
+    name: "Bathroom Motion Battery"
+    device_class: battery
+    rc_switch_raw:
+      code: '001101100110010000001111'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+  
+  #Bathroom Door
+  - platform: remote_receiver
+    id: door_bathroom_open
+    internal: true
+    rc_switch_raw:
+      code: '101000110111101000001110'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+    on_press:
+      - binary_sensor.template.publish:
+          id: door_bathroom
+          state: ON
+      
+  - platform: remote_receiver
+    id: door_bathroom_closed
+    internal: true
+    rc_switch_raw:
+      code: '101000110111101000000111'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+    on_press:
+      - binary_sensor.template.publish:
+          id: door_bathroom
+          state: OFF
+
+  - platform: template
+    name: "Bathroom Door"
+    id: door_bathroom
+    device_class: door
+
+  #Bathroom Door Battery
+  - platform: remote_receiver
+    name: "Bathroom Door Battery"
+    device_class: battery
+    rc_switch_raw:
+      code: '101000110111101000001111'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+  
+  #Entrance Door Tamper
+  - platform: remote_receiver
+    name: "Entrance Door Tamper"
+    device_class: safety
+    rc_switch_raw:
+      code: '010101111001010110011011'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+  
+  #Entrance Door
+  - platform: remote_receiver
+    id: door_entrance_open
+    internal: true
+    rc_switch_raw:
+      code: '010101111001010110011110'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+    on_press:
+      - binary_sensor.template.publish:
+          id: door_entrance
+          state: ON
+      
+  - platform: remote_receiver
+    id: door_entrance_closed
+    internal: true
+    rc_switch_raw:
+      code: '010101111001010110010111'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+    on_press:
+      - binary_sensor.template.publish:
+          id: door_entrance
+          state: OFF
+
+  - platform: template
+    name: "Entrance Door"
+    id: door_entrance
+    device_class: door
+
+  #Entrance Door Battery
+  - platform: remote_receiver
+    name: "Entrance Door Battery"
+    device_class: battery
+    rc_switch_raw:
+      code: '010101111001010110011111'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+    
+  
+  #Patio Door Tamper
+  - platform: remote_receiver
+    name: "Patio Door Tamper"
+    device_class: safety
+    rc_switch_raw:
+      code: '001010101010010110011011'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+  
+  #Patio Door Battery
+  - platform: remote_receiver
+    name: "Patio Door Battery"
+    device_class: battery
+    rc_switch_raw:
+      code: '001010101010010110011111'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+  
+  #Patio Door
+  - platform: remote_receiver
+    id: door_patio_open
+    internal: true
+    rc_switch_raw:
+      code: '001010101010010110011110'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+    on_press:
+      - binary_sensor.template.publish:
+          id: door_patio
+          state: ON
+      
+  - platform: remote_receiver
+    id: door_patio_closed
+    internal: true
+    rc_switch_raw:
+      code: '001010101010010110010111'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+    on_press:
+      - binary_sensor.template.publish:
+          id: door_patio
+          state: OFF
+
+  - platform: template
+    name: "Patio Door"
+    id: door_patio
+    device_class: door
+  
+  #Kitchen Smoke Alarm
+  - platform: remote_receiver
+    name: "Kitchen Smoke Alarm"
+    device_class: smoke
+    rc_switch_raw:
+      code: '011011001011000110110110'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
