@@ -1,0 +1,6 @@
+platform: group
+name: livingroom_all_covers
+entities:
+  - cover.livingroom_cover1
+  - cover.livingroom_cover2
+  - cover.livingroom_cover3
