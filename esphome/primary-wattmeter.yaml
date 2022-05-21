@@ -23,16 +23,16 @@ wifi:
 
 captive_portal:
 
-# Enable logging
-logger:
-  #level: VERBOSE
-  baud_rate: 0
+# Enable over-the-air updates
+ota:
 
 # Enable Home Assistant API
 api:
 
-# Enable over-the-air updates
-ota:
+# Enable logging
+logger:
+  #level: VERBOSE
+  baud_rate: 0
 
 status_led:
   pin:
