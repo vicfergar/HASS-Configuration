@@ -1,6 +1,6 @@
 #SP10 Module
 substitutions:
-  hostname: livingroom_switch
+  hostname: "livingroom-switch"
   upper_hostname: "Livingroom Switch"
 
 esphome:

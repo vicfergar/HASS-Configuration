@@ -1,5 +1,5 @@
 substitutions:
-  hostname: livingroom_cover3
+  hostname: "livingroom-cover3"
   open_duration: 29s
   close_duration: 28s
   max_duration: 32s

@@ -1,5 +1,5 @@
 substitutions:
-  hostname: nx_sm200_3
+  hostname: "nx-sm200-3"
   upper_hostname: "Thermomix"
   default_restore_mode: RESTORE_DEFAULT_ON
 

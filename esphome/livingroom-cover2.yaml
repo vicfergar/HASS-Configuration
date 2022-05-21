@@ -1,11 +1,11 @@
 substitutions:
-  hostname: "livingroom_cover2"
+  hostname: "livingroom-cover2"
   open_duration: 29s
   close_duration: 28s
   max_duration: 32s
   
 esphome:
-  name: livingroom_cover2
+  name: "livingroom-cover2"
   platform: ESP8266
   board: esp_wroom_02 #Shelly 2.5 2MB
   esp8266_restore_from_flash: true

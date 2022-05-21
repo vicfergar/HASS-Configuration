@@ -1,5 +1,5 @@
 substitutions:
-  hostname: mirror_ambient_light
+  hostname: "mirror-ambient-light"
   upper_hostname: "Mirror Light"
 
 esphome:

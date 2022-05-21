@@ -1,11 +1,11 @@
 substitutions:
-  hostname: "livingroom_cover1"
+  hostname: "livingroom-cover1"
   open_duration: 17s
   close_duration: 16s
   max_duration: 19s
   
 esphome:
-  name: livingroom_cover1
+  name: "livingroom-cover1"
   platform: ESP8266
   board: esp12e
   esp8266_restore_from_flash: true

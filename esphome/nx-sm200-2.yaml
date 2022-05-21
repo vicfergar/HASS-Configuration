@@ -1,6 +1,6 @@
 substitutions:
-  hostname: nx_sm200_4
-  upper_hostname: "AC Salón"
+  hostname: "nx-sm200-2"
+  upper_hostname: "Horno"
   default_restore_mode: RESTORE_DEFAULT_ON
 
 esphome:
@@ -106,7 +106,7 @@ binary_sensor:
   - platform: template
     name: "$upper_hostname On"
     lambda: |-
-        return id(power).state > 6;
+        return id(power).state > 1;
     
 script:
   - id: timer_off
@@ -121,6 +121,7 @@ switch:
     name: $upper_hostname
     pin: GPIO15
     restore_mode: $default_restore_mode
+    icon: mdi:toaster-oven
     on_turn_on:
       - light.turn_on: led
       #- script.execute: timer_off

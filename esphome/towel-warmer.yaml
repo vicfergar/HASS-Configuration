@@ -1,5 +1,5 @@
 substitutions:
-  hostname: towel_warmer
+  hostname: "towel-warmer"
   upper_hostname: "Toallero"
 
 esphome:

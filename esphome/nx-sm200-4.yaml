@@ -1,7 +1,7 @@
 substitutions:
-  hostname: nx_sm200_5
-  upper_hostname: "AC Habitación"
-  default_restore_mode: RESTORE_DEFAULT_OFF
+  hostname: "nx-sm200-4"
+  upper_hostname: "AC Salón"
+  default_restore_mode: RESTORE_DEFAULT_ON
 
 esphome:
   name: $hostname
@@ -106,7 +106,7 @@ binary_sensor:
   - platform: template
     name: "$upper_hostname On"
     lambda: |-
-        return id(power).state > 1;
+        return id(power).state > 6;
     
 script:
   - id: timer_off

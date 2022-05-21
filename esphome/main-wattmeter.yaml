@@ -1,5 +1,5 @@
 substitutions:
-  hostname: main_wattmeter
+  hostname: "main-wattmeter"
   upper_hostname: "Main Wattmeter"
   meter1_name: Main
   sensor_interval: 3s
@@ -117,8 +117,7 @@ sensor:
     accuracy_decimals: 3
     unit_of_measurement: kWh
     device_class: energy
-    state_class: measurement
-    last_reset_type: auto
+    state_class: total_increasing
     update_interval: $sensor_interval
     lambda: |-
       float initial = id(initial_daily_energy_count);
@@ -132,8 +131,7 @@ sensor:
     accuracy_decimals: 3
     unit_of_measurement: kWh
     device_class: energy
-    state_class: measurement
-    last_reset_type: auto
+    state_class: total_increasing
     update_interval: $sensor_interval
     lambda: |-
       float initial = id(initial_hourly_energy_count);

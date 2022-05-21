@@ -1,5 +1,5 @@
 substitutions:
-  hostname: kitchen_extractor
+  hostname: "kitchen-extractor"
   upper_hostname: "Extractor"
 
 esphome:

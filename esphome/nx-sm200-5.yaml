@@ -1,7 +1,7 @@
 substitutions:
-  hostname: nx_sm200_2
-  upper_hostname: "Horno"
-  default_restore_mode: RESTORE_DEFAULT_ON
+  hostname: "nx-sm200-5"
+  upper_hostname: "AC Habitación"
+  default_restore_mode: RESTORE_DEFAULT_OFF
 
 esphome:
   name: $hostname
@@ -121,7 +121,6 @@ switch:
     name: $upper_hostname
     pin: GPIO15
     restore_mode: $default_restore_mode
-    icon: mdi:toaster-oven
     on_turn_on:
       - light.turn_on: led
       #- script.execute: timer_off
