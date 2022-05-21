@@ -1,6 +1,6 @@
 platform: wake_on_lan
 name: victor_pc
-mac_address: !secret victor_pc_mac
+mac: !secret victor_pc_mac
 host: !secret victor_pc_ip
 turn_off:
   service: shell_command.wol_victor_pc_off

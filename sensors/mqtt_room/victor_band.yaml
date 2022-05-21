@@ -1,6 +1,0 @@
-platform: mqtt_room
-name: victor_band
-device_id: 'f7:df:f4:94:11:fb'
-state_topic: 'home/livingroom'
-timeout: 5
-away_timeout: 60

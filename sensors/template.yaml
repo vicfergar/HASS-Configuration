@@ -2,7 +2,36 @@ platform: template
 sensors:
   weather_temperature:
     value_template: "{{states.weather.home_weather.attributes['temperature']}}"
-    unit_of_measurement: '°C'
+    unit_of_measurement: "°C"
   weather_humidity:
     value_template: "{{states.weather.home_weather.attributes['humidity']}}"
-    unit_of_measurement: '%'
+    unit_of_measurement: "%"
+  #total_hourly_energy_fixed_costs:
+  #  value_template: >
+  #    {% set peaje_p1 = 30.67266 |float %}
+  #    {% set peaje_p2 = 1.424364 |float %}
+  #    {% set peaje_p3 = 1.424364 |float %}
+  #    {% set margen_comerc = 3.113 |float %}
+  #    {% set counter_rent = 0.048889 |float %}
+  #    {% set IVA = 1.10 |float %}
+  #    {% set imp_elec = 1.05112696 | float %}
+  #    {% set kw_meter = states('sensor.main_total_hourly_energy') | float %}
+  #    {% set kw_price = states('sensor.ree_pvpc_gen') | float %}
+  #    {% set power = state_attr('sensor.ree_pvpc_gen', 'available_power') * 0.001 | float %}
+  #    {% set period = state_attr('sensor.ree_pvpc_gen', 'period') %}
+  #
+  #    {% if period == 'P1' %}
+  #    {% set peaje = peaje_p1 %}
+  #    {% elif period == 'P2' %}
+  #    {% set peaje = peaje_p2 %}
+  #    {% else %}
+  #    {% set peaje = peaje_p3 %}
+  #    {% endif %}
+  #
+  #    {% set fix_term = power * (peaje + margen_comerc) * 1.0 / 365.0 / 24.0 | float %}
+  #    {% set var_term = (kw_meter * kw_price) | float %}
+  #    {{  ((((fix_term + var_term) * imp_elec) + (counter_rent / 24.0) ) * IVA )  | round(3) }}
+  #  state_class: total_increasing
+  #  device_class: monetary
+  #  icon: mdi:money
+  #  unit_of_measurement: "€"

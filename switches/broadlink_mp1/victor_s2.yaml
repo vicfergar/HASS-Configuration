@@ -1,5 +1,0 @@
-﻿platform: broadlink_mp1
-host: !secret victor_mp1_ip
-mac: !secret victor_mp1_mac
-type: mp12
-friendly_name: 'victor_s2'

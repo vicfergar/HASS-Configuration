@@ -1,9 +1,0 @@
-﻿platform: mqtt
-name: washing_machine
-state_topic: "stat/washing_machine/POWER"
-command_topic: "cmnd/washing_machine/POWER"
-payload_on: "ON"
-payload_off: "OFF"
-availability_topic: tele/washing_machine/LWT
-payload_available: Online
-payload_not_available: Offline

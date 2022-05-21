@@ -1,9 +1,78 @@
-timer_rafa_broadlink_s4:
+'1577683553110':
+  alias: Cast to victor
   sequence:
   - data:
-      entity_id: switch.rafa_broadlink_s4
-    service: switch.turn_on
-  - delay: 00:20
+      entity_id: media_player.victor_nest
+      view_path: victor
+    service: cast.show_lovelace_view
+'1586532036236':
+  alias: Abrir portal
+  sequence:
+  - data: {}
+    service: esphome.kitchen1_open_door
+  mode: single
+'1591942821857':
+  alias: Alternar luz ventilador
+  sequence:
   - data:
-      entity_id: switch.rafa_broadlink_s4
-    service: switch.turn_off
+      command: toggle_light
+      device: livingroom_fan
+      entity_id: remote.livingroom_ir_remote
+    entity_id: remote.livingroom_ir_remote
+    service: remote.send_command
+  mode: single
+  icon: mdi:ceiling-light
+teletrabajo:
+  alias: Teletrabajo
+  sequence:
+  - type: turn_on
+    device_id: 2278c692fa4811eabc771f22b889dd9a
+    entity_id: switch.regleta_lab_s4
+    domain: switch
+  - type: turn_on
+    device_id: 2278c692fa4811eabc771f22b889dd9a
+    entity_id: switch.regleta_lab_s3
+    domain: switch
+  - service: switch.turn_on
+    data: {}
+    entity_id: switch.victor_work_pc
+  - service: climate.turn_on
+    data: {}
+    entity_id: climate.lab_climate
+  mode: single
+  icon: mdi:briefcase-outline
+limpieza_inteligente:
+  alias: Limpiar zonas
+  sequence:
+  - service: python_script.vacuum_clean_segments
+    data:
+      entity_id: vacuum.dobby
+      input_boolean_entities:
+      - input_boolean.vacuum_pasillo: 16
+      - input_boolean.vacuum_invitados: 17
+      - input_boolean.vacuum_cocina: 18
+      - input_boolean.vacuum_dormitorio: 19
+      - input_boolean.vacuum_salon: 20
+      - input_boolean.vacuum_despacho: 21
+      - input_boolean.vacuum_bano: 22
+      - input_boolean.vacuum_aseo: 23
+  mode: single
+  icon: mdi:broom
+despertar:
+  alias: Despertar
+  sequence:
+  - service: light.turn_on
+    data:
+      brightness_pct: 10
+      color_name: red
+      white_value: 0
+    entity_id: light.mirror_light
+  - service: light.turn_on
+    data:
+      brightness_pct: 100
+      color_name: white
+      white_value: 255
+      transition: 60
+    entity_id: light.mirror_light
+  mode: single
+  icon: mdi:sun

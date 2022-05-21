@@ -1,6 +1,6 @@
 platform: smartir
 name: livingroom_climate
 device_code: 1283
-controller_data: !secret victor_rm3_ip
-temperature_sensor: sensor.livingroom_ble_sensor_temperature
-humidity_sensor: sensor.livingroom_ble_sensor_humidity
+controller_data: remote.livingroom_ir_remote
+temperature_sensor: sensor.livingroom_temperature
+humidity_sensor: sensor.livingroom_humidity

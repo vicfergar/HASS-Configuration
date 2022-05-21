@@ -1,0 +1,4 @@
+platform: wake_on_lan
+name: victor_work_pc
+mac: !secret victor_pc_work_mac
+host: !secret victor_pc_work_ip

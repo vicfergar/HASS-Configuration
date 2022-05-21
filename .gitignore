@@ -21,8 +21,17 @@ __pycache__/
 # Ensure these files are ignored, otherwise your secret data/credentials will leak.
 *.conf
 *.db*
+*.log*
 google_calendars.yaml
 ip_bans.yaml
 secrets.yaml
 known_devices.yaml
 node-red/flows_cred.json
+www/community/*
+custom_components/*
+appdaemon/*
+themes/google_dark_theme/google_dark_theme.yaml
+themes/google_theme/google_theme.yaml
+themes/ios-dark-mode/ios-dark-mode.yaml
+themes/slate/slate.yaml
+themes/synthwave/synthwave.yaml

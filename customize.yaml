@@ -75,14 +75,6 @@ sensor.main_energy:
   friendly_name: Energia hoy
 sensor.main_factor:
   friendly_name: Factor de potencia
-sensor.rafa_blitzwolf_voltage:
-  friendly_name: Voltaje
-sensor.rafa_blitzwolf_current:
-  friendly_name: Intensidad
-sensor.rafa_blitzwolf_power:
-  friendly_name: Potencia
-sensor.rafa_blitzwolf_energy:
-  friendly_name: Energia hoy
 sensor.washing_machine_power:
   friendly_name: Potencia
 sensor.washing_machine_energy:
@@ -94,15 +86,6 @@ sensor.victor_ble_sensor_temperature:
   friendly_name: Temperatura
   icon: mdi:thermometer
 sensor.victor_ble_sensor_humidity:
-  friendly_name: Humedad
-  icon: mdi:water-percent
-sensor.rafa_ble_sensor_battery:
-  friendly_name: BLE Rafa
-  icon: mdi:battery-bluetooth-variant
-sensor.rafa_ble_sensor_temperature:
-  friendly_name: Temperatura
-  icon: mdi:thermometer
-sensor.rafa_ble_sensor_humidity:
   friendly_name: Humedad
   icon: mdi:water-percent
 sensor.livingroom_ble_sensor_battery:
@@ -136,42 +119,13 @@ switch.washing_machine:
   icon: mdi:washing-machine
 switch.livingroom_button:
   hidden: true
-switch.livingroom_projector:
-  friendly_name: Proyector
-  icon: mdi:projector
 switch.livingroom_heater:
   friendly_name: Radiador
   icon: mdi:radiator
 switch.victor_s2:
   friendly_name: Lampara escritorio 2
   icon: mdi:lightbulb
-switch.rafa_fan:
-  friendly_name: Ventilador Rafa
-  icon: mdi:fan
-switch.rafa_extender:
-  friendly_name: Alargadora Rafa
-switch.rafa_ps4:
-  friendly_name: PS4
-  icon: mdi:xbox-controller
-switch.nas:
-  friendly_name: NAS
-  icon: mdi:server-network
 switch.s2:
-  icon: mdi:power-plug
-switch.rafa_broadlink_s1:
-  friendly_name: Lámpara estantería
-  icon: mdi:lightbulb
-switch.rafa_broadlink_s2:
-  friendly_name: S2
-  icon: mdi:power-plug
-switch.rafa_broadlink_s3:
-  friendly_name: S3
-  icon: mdi:power-plug
-switch.rafa_broadlink_s4:
-  friendly_name: S4
-  icon: mdi:power-plug
-switch.rafa_blitzwolf:
-  friendly_name: Blitzwolf
   icon: mdi:power-plug
 switch.victor_monitor:
   friendly_name: Monitor Víctor
@@ -179,42 +133,26 @@ switch.victor_monitor:
 switch.victor_pc:
   friendly_name: PC Víctor
   icon: mdi:desktop-tower
-switch.rafa_pc:
-  friendly_name: PC Rafa
-  icon: mdi:desktop-tower
-switch.rafa_pc_work:
-  friendly_name: PC trabajo Rafa
-  icon: mdi:laptop-windows
 switch.victor_steam_link:
   friendly_name: Steam Link
-  icon: mdi:xbox-controller
+  icon: mdi:steam
   hidden: true
-switch.rafa_steam_link:
-  friendly_name: Steam Link
-  icon: mdi:xbox-controller
 switch.victor_insecticide:
   friendly_name: Insecticida
   icon: mdi:bug
-switch.watering:
-  friendly_name: Riego
-  icon: mdi:water
 switch.victor_bedside_lamp:
   friendly_name: Lámpara mesilla
   icon: mdi:lamp
 switch.victor_sonoff_pow:
   friendly_name: Víctor POW
 fan.victor_fan:
-  friendly_name: Ventilador Víctor
+  friendly_name: Ventilador pié
 fan.livingroom_fan:
   friendly_name: Ventilador techo
-light.rafa_rgb_leds:
-  friendly_name: Luz ambiente Rafa
 light.victor_rgbw_leds:
   friendly_name: Luz espejo
 light.livingroom_table_light:
   friendly_name: Lámpara comedor
-media_player.av_player:
-  friendly_name: Decodificador A V
 media_player.victor_tv:
   friendly_name: Televisor
   icon: mdi:television-classic
@@ -223,10 +161,16 @@ media_player.victor_bedroom_speaker:
   icon: mdi:google-home
 climate.victor_climate:
   friendly_name: Climatizador Víctor
-climate.rafa_climate:
-  friendly_name: Climatizador Rafa
 cover.livingroom_cover1:
   friendly_name: Persiana 1
+cover.livingroom_cover2:
+  friendly_name: Persiana 2
+cover.livingroom_cover3:
+  friendly_name: Persiana 3
+cover.livingroom_cover4:
+  friendly_name: Persiana 4
+cover.livingroom_all_covers:
+  friendly_name: Persianas
 cover.victor_cover:
   friendly_name: Persiana
 input_text.washing_machine_start_hour:
@@ -237,7 +181,7 @@ sensor.home_assistant_v2_db:
 climate.bathroom_climate:
   friendly_name: Climatizador Baño
 climate.livingroom_climate:
-  friendly_name: Climatizador Salon
+  friendly_name: Climatizador Salón
 switch.victor_heater:
   friendly_name: Calentador
   icon: mdi:radiator
@@ -247,3 +191,40 @@ sensor.tplink_router_kbytesec_sent:
   friendly_name: Subida
 device_tracker.192_168_1_128_04_d1_3a_6d_fd_37:
   friendly_name: Mi Band Víctor - HVictor
+script.1586532036236:
+  icon: mdi:door-open
+sensor.system_battery:
+  friendly_name: Bateria
+sensor.lab_ble_sensor_battery:
+  friendly_name: BLE Despacho
+  icon: mdi:battery-bluetooth-variant
+sensor.bathroom_ble_sensor_battery:
+  friendly_name: BLE Baño
+  icon: mdi:battery-bluetooth-variant
+sensor.bedroom_ble_sensor_battery:
+  friendly_name: BLE Habitación
+  icon: mdi:battery-bluetooth-variant
+script.1591942821857: {}
+switch.dishwasher:
+  friendly_name: Lavavajillas
+  icon: mdi:dishwasher
+light.kitchen_main_light:
+  friendly_name: Luz principal
+binary_sensor.kitchen_entryphone:
+  friendly_name: Porterillo
+light.bathroom_plug_light:
+  friendly_name: Luz nocturna
+light.mirror_light:
+  friendly_name: Luz espejo
+  position: 1.0;2.0
+binary_sensor.dishwasher_on:
+  friendly_name: Lavavajillas
+climate.lab_climate:
+  friendly_name: Climatizador Despacho
+switch.victor_work_pc:
+  friendly_name: PC Trabajo
+  icon: mdi:desktop-tower
+climate.bedroom_climate:
+  friendly_name: Climatizador Habitación
+switch.radiador:
+  icon: mdi:radiator

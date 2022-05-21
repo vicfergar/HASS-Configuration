@@ -1,21 +1,15 @@
 homeassistant:
-  # Name of the location where Home Assistant is running
-  name: home
-  # Location required to calculate the time the sun rises and sets
-  latitude: !secret home_latitude
-  longitude: !secret home_longitude
-  # Impacts weather/sunrise data (altitude above sea level in meters)
-  elevation: 10
-  # metric for Metric, imperial for Imperial
-  unit_system: metric
-  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  time_zone: Europe/Madrid
   # Customization file
   customize: !include customize.yaml
   auth_providers:
     - type: homeassistant
-  whitelist_external_dirs:
+    - type: trusted_networks
+      trusted_networks:
+        - 192.168.1.0/24
+  allowlist_external_dirs:
     - /config/
+
+default_config:
 
 # Enables the frontend
 frontend:
@@ -28,34 +22,23 @@ config:
 system_health:
 
 http:
-  base_url: !secret http_base_url
+  server_port: 443
   ssl_certificate: !secret http_certificate
   ssl_key: !secret http_key
-  trusted_networks:
-    - 127.0.0.1
-    - 192.168.1.0/24
-  cors_allowed_origins:
-    - http://hassio.local:7080
-  ip_ban_enabled: True
+  ip_ban_enabled: False
   login_attempts_threshold: 5
 
 # MQTT Broker
-mqtt:
-  broker: core-mosquitto
-  username: !secret mqtt_user
-  password: !secret mqtt_password
-
-# Checks for available updates
-# Note: This component will send some information about your system to
-# the developers to assist with development of Home Assistant.
-# For more information, please see:
-# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
-updater:
-  # Optional, allows Home Assistant developers to focus on popular components.
-  include_used_components: true
+#mqtt:
+#  broker: core-mosquitto
+#  username: !secret mqtt_user
+#  password: !secret mqtt_password
 
 # Enables wake on lan
 wake_on_lan:
+
+# Enables custom python scripts as services
+python_script:
 
 # Discover some devices automatically
 discovery:
@@ -69,9 +52,6 @@ history:
 # View all events in a logbook
 logbook:
 
-# Enables a map showing the location of tracked devices
-map:
-
 # Track the sun
 sun:
 
@@ -84,33 +64,29 @@ weather:
 # Text to speech
 tts:
   - platform: google_translate
-    language: 'es'
+    language: "es"
     service_name: google_say
-
-# Google Calendar API
-#google:
-#  client_id: !secret google_api_client_id
-#  client_secret: !secret google_api_client_secret
 
 person:
 
 smartir:
+  check_updates: false
 
-custom_updater:
-  card_urls:
-    - https://raw.githubusercontent.com/kalkih/mini-media-player/master/tracker.json
+webostv:
+  name: victor_tv
+  host: !secret victor_tv_ip
+  turn_on_action:
+    service: wake_on_lan.send_magic_packet
+    data:
+      mac: !secret victor_tv_mac
+  customize:
+    sources:
+      - livetv
+      - youtube
+      - netflix
+      - steam link
 
-googlehome:
-  devices:
-    - host: !secret victor_googlehome
-      track_alarms: true
-
-# GPS Presence detection
-device_tracker:
-#  - platform: bluetooth_tracker
-  - platform: google_maps
-    username: !secret google_shared_account
-    password: !secret shared_password
+breaking_changes:
 
 # Logs
 logger:
@@ -118,10 +94,12 @@ logger:
   logs:
     homeassistant.components.history: debug
     homeassistant.components.recorder: debug
+    homeassistant.components.xiaomi_miio: debug
+    miio: debug
 
 # Enables recorder in external database
 recorder:
-#  db_url: !secret db_connection_str
+  db_url: !secret db_connection_str
   purge_keep_days: 3
   exclude:
     domains:
@@ -143,10 +121,7 @@ recorder:
       - sensor.main_power
       - sensor.main_voltage
       - sensor.main_factor
-      - sensor.victor_pow_current
-      - sensor.victor_pow_energy
-      - sensor.victor_pow_power
-      - sensor.victor_pow_voltage
+      - sensor.washing_remaining
 
 influxdb:
   host: a0d7b954-influxdb
@@ -157,16 +132,45 @@ influxdb:
   max_retries: 3
   default_measurement: state
 
-panel_iframe:
-  grafana:
-    title: Grafana
-    icon: mdi:chart-areaspline
-    url: !secret grafana_url
+alexa:
+  smart_home:
+
+spotify:
+  client_id: !secret spotify_client_id
+  client_secret: !secret spotify_client_secret
+
+stream:
+
+utility_meter:
+  energy:
+    name: energy_utility_meter
+    source: sensor.main_total_daily_energy
+    cycle: daily
+    tariffs:
+      - Punta
+      - Llano
+      - Valle
+
+plant:
+  dracena_marginata:
+    sensors:
+      #battery: sensor.dracena_marginata_battery
+      brightness: sensor.dracena_marginata_illuminance
+      conductivity: sensor.dracena_marginata_soil_conductivity
+      moisture: sensor.dracena_marginata_moisture
+      temperature: sensor.dracena_marginata_temperature
+    min_brightness: 1500
+    max_brightness: 6000
+    min_conductivity: 350
+    max_conductivity: 2000
+    min_moisture: 15
+    max_moisture: 60
+    min_temperature: 10
+    max_temperature: 32
 
 # INCLUDE REGION #
 automation: !include automations.yaml
 script: !include scripts.yaml
-input_text: !include input_text.yaml
 google_assistant: !include google_assistant.yaml
 
 binary_sensor: !include_dir_list binary_sensors/
@@ -174,9 +178,9 @@ camera: !include_dir_list cameras/
 climate: !include_dir_list climates/
 cover: !include_dir_list covers/
 fan: !include_dir_list fans/
-light: !include_dir_list lights/
-media_player: !include_dir_list media_players/
+#light: !include_dir_list lights/
+#media_player: !include_dir_list media_players/
 notify: !include_dir_list notifications/
+#remote: !include_dir_list remotes/
 sensor: !include_dir_list sensors/
 switch: !include_dir_list switches/
-zone: !include_dir_list zones/

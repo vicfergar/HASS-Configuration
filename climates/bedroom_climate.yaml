@@ -1,0 +1,7 @@
+platform: generic_thermostat
+name: bedroom_climate
+heater: switch.radiador
+target_sensor: sensor.bedroom_temperature
+precision: 1.0
+max_temp: 26
+min_temp: 10

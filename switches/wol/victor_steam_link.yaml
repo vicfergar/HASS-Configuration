@@ -1,4 +1,4 @@
 platform: wake_on_lan
 name: victor_steam_link
-mac_address: !secret victor_steam_mac
+mac: !secret victor_steam_mac
 host: !secret victor_steam_ip

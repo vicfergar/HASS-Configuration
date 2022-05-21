@@ -1,4 +1,4 @@
 platform: smartir
 name: livingroom_fan
 device_code: 1080
-controller_data: !secret victor_rm3_ip
+controller_data: remote.livingroom_ir_remote

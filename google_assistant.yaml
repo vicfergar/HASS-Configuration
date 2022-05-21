@@ -1,5 +1,4 @@
 project_id: !secret google_assistant_project_id
-api_key: !secret google_assistant_api_key
 exposed_domains:
   - switch
   - light
@@ -32,29 +31,27 @@ entity_config:
   switch.victor_pc:
     room: Salón
   switch.victor_bedside_lamp:
-    room: Habitacion de Victor
+    room: Habitacion
   cover.victor_cover:
-    room: Habitacion de Victor
+    room: Habitacion
   fan.victor_fan:
-    room: Habitacion de Victor
+    room: Habitacion
   switch.victor_insecticide:
-    room: Habitacion de Victor
+    room: Habitacion
   light.victor_rgbw_leds:
-    room: Habitacion de Victor
+    room: Habitacion
   climate.victor_climate:
     expose: true
-    room: Habitacion de Victor
+    room: Habitacion
   media_player.victor_tv:
     expose: true
-    room: Habitacion de Victor
+    room: Habitacion
   script.open_entry_door:
     expose: true
-    name: Entrance
+    name: Abrir portal
   switch.ledson:
     expose: false
   light.livingroom_led_indicator:
-    expose: false
-  switch.livingroom_fan_light:
     expose: false
   switch.victor_fan:
     expose: false
@@ -64,7 +61,6 @@ entity_config:
     expose: false
   switch.victor_s2:
     expose: false
-    room: Salón
   switch.victor_sonoff:
     expose: false
   switch.victor_steam_link:

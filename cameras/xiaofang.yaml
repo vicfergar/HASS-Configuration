@@ -1,0 +1,4 @@
+platform: mjpeg
+still_image_url: !secret  xiaofang_snapshot_url
+mjpeg_url: !secret xiaofang_stream_url
+name: Xiaofang

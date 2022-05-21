@@ -1,0 +1,328 @@
+- id: '1569111211572'
+  alias: Bajar persiana despacho al amanecer
+  trigger:
+  - event: sunrise
+    offset: -01:00:00
+    platform: sun
+  condition: []
+  action:
+  - data:
+      entity_id: cover.victor_cover
+    service: cover.close_cover
+  - delay: 00:00:10
+  - data: {}
+    service: esphome.victor_cover_force_closed
+  mode: single
+- id: '1586728981472'
+  alias: '[System] Cambiar a tema oscuro'
+  description: ''
+  trigger:
+  - event: start
+    platform: homeassistant
+  - event: sunset
+    platform: sun
+  condition:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  action:
+  - data:
+      name: slate
+    service: frontend.set_theme
+- id: '1586729054792'
+  alias: '[System] Cambiar a tema claro'
+  description: ''
+  trigger:
+  - event: start
+    platform: homeassistant
+  - event: sunrise
+    platform: sun
+  condition:
+  - condition: state
+    entity_id: sun.sun
+    state: above_horizon
+  action:
+  - data:
+      name: default
+    service: frontend.set_theme
+- id: '1610522882548'
+  alias: '[Dormitorio] Encender radiador a las 22:00'
+  description: ''
+  trigger:
+  - platform: time
+    at: '22:00:00'
+  condition:
+  - condition: state
+    entity_id: person.victor
+    state: home
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: person.aurora
+      state: home
+  action:
+  - type: turn_on
+    device_id: bfc947d72ae5772ed22161fb8329739e
+    entity_id: switch.radiador
+    domain: switch
+  mode: single
+- id: '1614460315204'
+  alias: '[IKEA Remote] Toggle floor lamp'
+  description: ''
+  trigger:
+  - device_id: a8c93275694085b0d6ffde36761ae5e3
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_on
+  condition: []
+  action:
+  - type: toggle
+    device_id: 83b95781752dab8753b5f69e0f7dc28b
+    entity_id: light.lampara_pie
+    domain: light
+  mode: single
+- id: '1614460400963'
+  alias: '[IKEA Remote] Bright up press'
+  description: ''
+  trigger:
+  - device_id: a8c93275694085b0d6ffde36761ae5e3
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: dim_up
+  condition: []
+  action:
+  - type: brightness_increase
+    device_id: 83b95781752dab8753b5f69e0f7dc28b
+    entity_id: light.lampara_pie
+    domain: light
+  mode: single
+- id: '1614460424275'
+  alias: '[IKEA Remote] Bright down'
+  description: ''
+  trigger:
+  - device_id: a8c93275694085b0d6ffde36761ae5e3
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: dim_down
+  condition: []
+  action:
+  - type: brightness_decrease
+    device_id: 83b95781752dab8753b5f69e0f7dc28b
+    entity_id: light.lampara_pie
+    domain: light
+  mode: single
+- id: '1623705870278'
+  alias: '[Cocina] Apagar lavavajillas'
+  description: ''
+  trigger:
+  - platform: time
+    at: 08:00:00
+  condition: []
+  action:
+  - type: turn_off
+    device_id: c072a84472a413219449ffdd154dad08
+    entity_id: switch.dishwasher
+    domain: switch
+  mode: single
+- id: '1628836131159'
+  alias: '[Utility Meter] Change to Punta'
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: sensor.ree_pvpc_gen
+    attribute: period
+  condition:
+  - condition: state
+    entity_id: sensor.ree_pvpc_gen
+    state: P1
+    attribute: period
+  action:
+  - service: utility_meter.select_tariff
+    data:
+      tariff: Punta
+    target:
+      entity_id: utility_meter.energy
+  mode: single
+- id: '1628836263382'
+  alias: '[Utility Meter] Change to Valle'
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: sensor.ree_pvpc_gen
+    attribute: period
+  condition:
+  - condition: state
+    entity_id: sensor.ree_pvpc_gen
+    state: P3
+    attribute: period
+  action:
+  - service: utility_meter.select_tariff
+    data:
+      tariff: Valle
+    target:
+      entity_id: utility_meter.energy
+  mode: single
+- id: '1628836404704'
+  alias: '[Utility Meter] Change to Llano'
+  description: ''
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: sensor.ree_pvpc_gen
+    attribute: period
+  condition:
+  - condition: state
+    entity_id: sensor.ree_pvpc_gen
+    state: P2
+    attribute: period
+  action:
+  - service: utility_meter.select_tariff
+    data:
+      tariff: Llano
+    target:
+      entity_id: utility_meter.energy
+  mode: single
+- id: '1629148961811'
+  alias: AC safe turn off on power limit
+  description: ''
+  trigger:
+  - type: power
+    platform: device
+    device_id: 4caa7e931054e7e06adbfbc76e1cd1d8
+    entity_id: sensor.main_power
+    domain: sensor
+    above: 2500
+    for:
+      hours: 0
+      minutes: 6
+      seconds: 0
+      milliseconds: 0
+  condition: []
+  action:
+  - service: climate.turn_off
+    target:
+      entity_id: climate.livingroom_climate
+  - type: turn_off
+    device_id: 3d798ebf66eacf9fa80794a5ee4902bc
+    entity_id: switch.insecticida
+    domain: switch
+  mode: single
+- id: '1635721176468'
+  alias: '[Cocina] Encender lavavajillas'
+  description: ''
+  trigger:
+  - platform: time
+    at: 03:00:00
+  condition: []
+  action:
+  - type: turn_on
+    device_id: c072a84472a413219449ffdd154dad08
+    entity_id: switch.dishwasher
+    domain: switch
+  mode: single
+- id: '1636123954308'
+  alias: '[Cocina] Apertura automatica'
+  description: ''
+  trigger:
+  - type: sound
+    platform: device
+    device_id: 3925dc5ab8b5c2a3acd50e483ed95771
+    entity_id: binary_sensor.kitchen_entryphone
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+      milliseconds: 0
+  condition:
+  - condition: state
+    entity_id: input_boolean.apertura_automatica
+    state: 'on'
+  action:
+  - service: script.1586532036236
+  mode: single
+- id: '1638704316070'
+  alias: Turn Christmas mode
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: media_player.nest_salon
+    to: playing
+  condition: []
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.arbol_navidad
+  mode: single
+- id: '1642198875360'
+  alias: '[Dormitorio] Encender insecticida a las 22:00'
+  description: ''
+  trigger:
+  - platform: time
+    at: '22:00:00'
+  condition:
+  - condition: state
+    entity_id: person.victor
+    state: home
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: person.aurora
+      state: home
+  action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.insecticida
+  mode: single
+- id: '1651890796216'
+  alias: Washing Machine ended notification
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.lavadora_on
+    from: 'On'
+    to: 'Off'
+  condition: []
+  action:
+  - service: tts.cloud_say
+    data:
+      entity_id: media_player.altavoces_de_casa
+      message: 'Lavadora: Programa finalizado'
+      cache: true
+  mode: single
+- id: '1653118976171'
+  alias: Auto-apagado del ventilador del salon
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - media_player.victor_tv
+    - light.lampara_pie
+    - light.livingroom_table_light
+    to: 'Off'
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+    from: 'On'
+  - platform: time
+    at: '22:00:00'
+  condition:
+  - condition: time
+    before: 07:00:00
+    after: '22:00:00'
+  action:
+  - service: fan.turn_off
+    data: {}
+    target:
+      entity_id: fan.livingroom_fan
+  mode: single

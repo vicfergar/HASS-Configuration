@@ -1,8 +1,0 @@
-﻿platform: mqtt
-name: washing_machine_power
-state_topic: stat/washing_machine/ENERGY
-value_template: "{{ value_json.Power }}"
-availability_topic: tele/washing_machine/LWT
-payload_available: Online
-payload_not_available: Offline
-unit_of_measurement: "W"

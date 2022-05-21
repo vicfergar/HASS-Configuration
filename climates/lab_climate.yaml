@@ -1,0 +1,7 @@
+platform: generic_thermostat
+name: lab_climate
+heater: switch.regleta_lab_s1
+target_sensor: sensor.lab_temperature
+precision: 1.0
+max_temp: 26
+min_temp: 10

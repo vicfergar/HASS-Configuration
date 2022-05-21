@@ -1,7 +1,0 @@
-platform: mqtt
-name: ree_pvpc_vhc
-state_topic: "tele/ree/pvpc/vhc"
-unit_of_measurement: "€/MHh"
-availability_topic: tele/node_red/LWT
-payload_available: Online
-payload_not_available: Offline

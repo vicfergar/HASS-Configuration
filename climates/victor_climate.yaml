@@ -1,6 +1,0 @@
-platform: generic_thermostat
-name: victor_climate
-heater: switch.victor_heater
-target_sensor: sensor.victor_ble_sensor_temperature
-max_temp: 26
-min_temp: 10

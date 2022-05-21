@@ -5,3 +5,4 @@ resources:
     arg: /
   - type: processor_use
   - type: last_boot
+  - type: processor_temperature
