@@ -8,6 +8,7 @@ esphome:
   name: $hostname
   platform: ESP8266
   board: esp12e
+  esp8266_restore_from_flash: true
 
 wifi:
   ssid: !secret wifi_ssid
@@ -16,7 +17,7 @@ wifi:
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: $hostname
-    password: "5VsLH03EpOZM"
+    password: !secret wifi_ap_password
 
 captive_portal:
 
@@ -40,12 +41,64 @@ status_led:
 # Enable time component to reset energy at midnight
 time:
   - platform: homeassistant
+    id: hass_time
+    on_time_sync:
+      - script.execute: check_daily_reset
+      - script.execute: check_hourly_reset
+    on_time:
+      # Every day
+      - seconds: 0
+        minutes: 0
+        hours: 0
+        then:
+          - script.execute: check_daily_reset
+      # Every hour
+      - seconds: 0
+        minutes: 0
+        then:
+          - script.execute: check_hourly_reset
 
 uart:
   - tx_pin: TX
     rx_pin: RX
     baud_rate: 9600
     stop_bits: 1
+    
+script:
+  - id: check_daily_reset
+    mode: queued
+    then:
+      - lambda: |-
+          int current_day = id(hass_time).now().day_of_year;
+          if (id(stored_day) != current_day) {
+            id(stored_day) = current_day;
+            id(initial_daily_energy_count) = id(meter1_energy).state;
+          }
+  - id: check_hourly_reset
+    mode: queued
+    then:
+      - lambda: |-
+          int current_hour = id(hass_time).now().hour;
+          if (id(stored_hour) != current_hour) {
+            id(stored_hour) = current_hour;
+            id(initial_hourly_energy_count) = id(meter1_energy).state;
+          }
+    
+globals:
+  - id: stored_day
+    type: int
+    restore_value: yes
+  - id: initial_daily_energy_count
+    type: float
+    restore_value: yes
+    initial_value: '-1'
+  - id: stored_hour
+    type: int
+    restore_value: yes
+  - id: initial_hourly_energy_count
+    type: float
+    restore_value: yes
+    initial_value: '-1'
 
 sensor:
   - platform: uptime
@@ -61,21 +114,52 @@ sensor:
     power:
       name: "$meter1_name Power"
       id: meter1_power
+    energy:
+      #name: "$meter1_name Energy"
+      id: meter1_energy
+      accuracy_decimals: 3
+      unit_of_measurement: kWh
+      filters:
+        - multiply: 0.001   # convert Wh to kWh
     frequency:
       name: "$meter1_name Frequency"
     power_factor:
       name: "$meter1_name Power Factor"
-    #energy:
-    #  name: "$meter1_name Total Energy"
-    #  filters:
-    #    - multiply: 0.001   # convert Wh to kWh
-    #  accuracy_decimals: 3
-    #  unit_of_measurement: kWh
     update_interval: $sensor_interval
-  - platform: total_daily_energy
-    name: "$meter1_name Total Energy Today"
-    power_id: meter1_power
-    filters:
-      - multiply: 0.001   # convert Wh to kWh
+  - platform: template
+    name: "$meter1_name Total Daily Energy"
     accuracy_decimals: 3
     unit_of_measurement: kWh
+    device_class: energy
+    state_class: measurement
+    last_reset_type: auto
+    update_interval: $sensor_interval
+    lambda: |-
+      float initial = id(initial_daily_energy_count);
+      if (initial >= 0) {
+        return id(meter1_energy).state - initial;
+      } else {
+        return {};
+      }
+  - platform: template
+    name: "$meter1_name Total Hourly Energy"
+    accuracy_decimals: 3
+    unit_of_measurement: kWh
+    device_class: energy
+    state_class: measurement
+    last_reset_type: auto
+    update_interval: $sensor_interval
+    lambda: |-
+      float initial = id(initial_hourly_energy_count);
+      if (initial >= 0) {
+        return id(meter1_energy).state - initial;
+      } else {
+        return {};
+      }
+  #- platform: total_daily_energy
+  #  name: "$meter1_name Total Energy Today"
+  #  power_id: meter1_power
+  #  filters:
+  #    - multiply: 0.001   # convert Wh to kWh
+  #  accuracy_decimals: 3
+  #  unit_of_measurement: kWh

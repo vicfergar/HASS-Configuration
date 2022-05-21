@@ -1,12 +1,11 @@
 substitutions:
-  hostname: victor_s20_3
-  upper_hostname: "Sofa Lamp"
-
-#ESP12 Fixed S20
+  hostname: entry_door_light
+  upper_hostname: "Entry door Lifht"
+  
 esphome:
   name: $hostname
   platform: ESP8266
-  board: esp12e
+  board: esp01_1m
 
 wifi:
   ssid: !secret wifi_ssid
@@ -21,20 +20,16 @@ captive_portal:
 
 # Enable logging
 logger:
-  baud_rate: 0
 
 # Enable Home Assistant API
 api:
 
 ota:
 
-web_server:
-  port: 80
-
 status_led:
   pin:
     number: GPIO13
-    inverted: yes
+    inverted: true
     
 sensor:
   - platform: wifi_signal
@@ -43,17 +38,33 @@ sensor:
 
 binary_sensor:
   - platform: gpio
-    pin:
-      number: GPIO0
-      mode: INPUT_PULLUP
-      inverted: True
-    id: button
+    pin: GPIO00
+    id: reset
+    internal: true
+    filters:
+      - invert:
+      - delayed_off: 10ms
     on_press:
-      - switch.toggle: relay
+      - switch.toggle: 
+          id: relay_1
+
+  - platform: gpio
+    pin: GPIO04
+    id: switch_1
+    on_press:
+      then:
+        - switch.turn_on:
+            id: relay_1
+    on_release:
+      then:
+        - switch.turn_off:
+            id: relay_1
 
 switch:
   - platform: gpio
-    name: $upper_hostname
-    icon: mdi:lamp
+    name: "$upper_hostname"
+    icon: "mdi: lightbulb_outline"
     pin: GPIO12
-    id: relay
+    id: relay_1
+    restore_mode: restore_default_off
+  

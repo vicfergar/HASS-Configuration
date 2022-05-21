@@ -1,0 +1,157 @@
+substitutions:
+  hostname: nx_sm200_4
+  upper_hostname: "AC Salón"
+  default_restore_mode: RESTORE_DEFAULT_ON
+
+esphome:
+  name: $hostname
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: $hostname
+    password: !secret wifi_ap_password
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+# Enable over-the-air updates
+ota:
+
+# Enable Web server
+web_server:
+  port: 80
+
+# Sync time with Home Assistant
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+    
+status_led:
+  pin:
+    number: GPIO0
+    inverted: yes
+    
+sensor:
+  # Uptime sensor
+  - platform: uptime
+    name: "$upper_hostname Uptime"
+  # WiFi Signal sensor
+  - platform: wifi_signal
+    name: "$upper_hostname Wifi Signal"
+    update_interval: 10s
+  # Power sensor
+  - platform: hlw8012
+    sel_pin:
+      number: GPIO03
+      inverted: True
+    cf_pin: GPIO05
+    cf1_pin: GPIO14
+    current_resistor: 0.001 ohm
+    voltage_divider: 2041
+    change_mode_every: 4
+    update_interval: 10s
+    # Current sensor
+    current:
+      name: "$upper_hostname Current"
+      unit_of_measurement: A
+      accuracy_decimals: 3
+      filters:
+        # Map from sensor -> measured value
+        - calibrate_linear:
+            - 0.0 -> 0.0
+            - 2.4 -> 2.15
+            - 4.9 -> 4.33
+        # Make everything below 0.01A appear as just 0A.
+        - lambda: if (x < 0.01) return 0; else return x;
+    # Voltage sensor
+    voltage:
+      name: "$upper_hostname Voltage"
+      unit_of_measurement: V
+      accuracy_decimals: 1
+      filters:
+        # Map from sensor -> measured value
+        - calibrate_linear:
+            - 0.0 -> 0.0
+            - 526.7 -> 231.8
+    # Power sensor
+    power:
+      id: power
+      name: "$upper_hostname Power"
+      unit_of_measurement: W
+      accuracy_decimals: 0
+      filters:
+        # Map from sensor -> measured value
+        - calibrate_linear:
+            - 0.0 -> 0.0
+            - 2287 -> 500
+            - 4584 -> 990
+        # Make everything below 3W appear as just 0W.
+        - lambda: if (x < 3) return 0; else return x;
+  # Total daily energy sensor
+  - platform: total_daily_energy
+    name: "$upper_hostname Energy Today"
+    power_id: power
+    filters:
+      # Multiplication factor from W to kW is 0.001
+      - multiply: 0.001
+    unit_of_measurement: kWh
+
+binary_sensor:
+  # Binary sensor for the button press
+  - platform: gpio
+    id: button
+    pin:
+      number: GPIO13
+      inverted: true
+    on_press:
+      - switch.toggle: relay
+  
+  # Connected device is power on
+  - platform: template
+    name: "$upper_hostname On"
+    lambda: |-
+        return id(power).state > 6;
+    
+script:
+  - id: timer_off
+    then:
+    - delay: 120min
+    - switch.turn_off: relay
+
+switch:
+  # Switch to toggle the relay
+  - platform: gpio
+    id: relay
+    name: $upper_hostname
+    pin: GPIO15
+    restore_mode: $default_restore_mode
+    on_turn_on:
+      - light.turn_on: led
+      #- script.execute: timer_off
+    on_turn_off:
+      - light.turn_off: led
+      #- script.stop: timer_off
+
+output:
+  # Relay state led
+  - platform: esp8266_pwm
+    id: state_led
+    pin:
+      number: GPIO2
+      inverted: true
+
+light:
+  # Relay state light
+  - platform: monochromatic
+    restore_mode: $default_restore_mode
+    output: state_led
+    id: led

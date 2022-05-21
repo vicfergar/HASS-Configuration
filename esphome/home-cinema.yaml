@@ -1,0 +1,161 @@
+substitutions:
+  hostname: home-cinema
+  upper_hostname: "Home Cinema"
+  volume_step: 10.0f
+
+esphome:
+  name: $hostname
+  platform: ESP32
+  board: nodemcu-32s
+  platformio_options:
+    board_build.partitions: min_spiffs.csv
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  #use_address : 192.168.1.119
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: $hostname
+    password: !secret wifi_ap_password
+
+captive_portal:
+
+# Enable logging
+logger:
+  level: VERBOSE
+
+# Enable Home Assistant API
+api:
+  services:
+    - service: turn_on
+      then:
+        - binary_sensor.template.publish:
+            id: power_level
+            state: ON
+    - service: turn_off
+      then:
+        - binary_sensor.template.publish:
+            id: power_level
+            state: OFF
+    - service: volume_up
+      then:
+        - sensor.template.publish:
+            id: volume_level
+            state: !lambda 'return id(volume_level).state + $volume_step;'
+    - service: volume_down
+      then:
+        - sensor.template.publish:
+            id: volume_level
+            state: !lambda 'return id(volume_level).state - $volume_step;'
+    - service: volume_set
+      variables:
+        volume: float
+      then:
+        - sensor.template.publish:
+            id: volume_level
+            state: !lambda 'return volume;'
+    - service: bass_up
+      then:
+        - sensor.template.publish:
+            id: bass_level
+            state: !lambda 'return id(bass_level).state + $volume_step;'
+    - service: bass_down
+      then:
+        - sensor.template.publish:
+            id: bass_level
+            state: !lambda 'return id(bass_level).state - $volume_step;'
+    - service: bass_set
+      variables:
+        volume: float
+      then:
+        - sensor.template.publish:
+            id: bass_level
+            state: !lambda 'return volume;'
+
+ota:
+
+web_server:
+  port: 80
+    
+i2c:
+  sda: 21
+  scl: 22
+    
+pcf8574:
+  - id: pcf8574_hub
+    address: 0x20
+    pcf8575: False
+      
+status_led:
+  pin:
+    pcf8574: pcf8574_hub
+    number: 3
+    mode: OUTPUT
+
+binary_sensor:
+  - platform: template
+    id: power_level
+    name: "$upper_hostname Power"
+    on_press:
+      - output.turn_on: power_output
+    on_release:
+      - output.turn_off: power_output
+    
+sensor:
+  - platform: template
+    id: volume_level
+    name: "$upper_hostname Volume"
+    update_interval: never
+    icon: mdi:speaker
+    unit_of_measurement: '%'
+    on_value:
+      - output.set_level:
+          id: volume_output
+          level: !lambda return x;
+  - platform: template
+    id: bass_level
+    name: "$upper_hostname Bass"
+    update_interval: never
+    icon: mdi:speaker
+    unit_of_measurement: '%'
+    on_value:
+      - output.set_level:
+          id: bass_output
+          level: !lambda return x;
+
+output:
+  - platform: gpio
+    id: power_output
+    pin:
+      pcf8574: pcf8574_hub
+      number: 4
+      mode: OUTPUT
+  - platform: esp32_dac
+    id: volume_output
+    pin: GPIO26
+    min_power: 0.3
+    #power_supply: power_output
+  - platform: esp32_dac
+    id: bass_output
+    pin: GPIO25
+    min_power: 0.3
+    
+#power_supply:
+#  - id: power_output
+#    keep_on_time: 0s
+#    pin:
+#      pcf8574: pcf8574_hub
+#      number: 4
+#      mode: OUTPUT
+    
+#light:
+#  - platform: monochromatic
+#    name: "Bass"
+#    output: bass_output
+#    default_transition_length: 0s
+#  - platform: monochromatic
+#    name: "Volume"
+#    output: volume_output
+#    default_transition_length: 0s

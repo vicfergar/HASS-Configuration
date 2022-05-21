@@ -1,6 +1,7 @@
 substitutions:
-  hostname: teckin_3653
+  hostname: teckin-3653
   upper_hostname: "Dishwasher"
+  default_restore_mode: RESTORE_DEFAULT_ON
 
 esphome:
   name: $hostname
@@ -15,7 +16,7 @@ wifi:
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: $hostname
-    password: "5VsLH03EpOZM"
+    password: !secret wifi_ap_password
 
 captive_portal:
 
@@ -59,6 +60,7 @@ sensor:
     cf1_pin: GPIO14
     change_mode_every: 3
     update_interval: 10s
+    
     # Current sensor
     current:
       name: "$upper_hostname Current"
@@ -67,15 +69,13 @@ sensor:
       filters:
         # Map from sensor -> measured value
         - calibrate_linear:
-            - 0.0 -> 0.013
-            - 0.08208 -> 0.071
-            - 1.34223 -> 1.066
-            - 5.57170 -> 4.408
-            - 6.69184 -> 5.259
-            - 6.97187 -> 5.540
+            - 0.0 -> 0.0
+            - 2.6 -> 2.15
+            - 5.3 -> 4.33
         # Make everything below 0.01A appear as just 0A.
         # Furthermore it corrects 0.013A for the power usage of the plug.
         - lambda: if (x < (0.01 - 0.013)) return 0; else return (x - 0.013);
+
     # Voltage sensor
     voltage:
       name: "$upper_hostname Voltage"
@@ -85,8 +85,7 @@ sensor:
         # Map from sensor -> measured value
         - calibrate_linear:
             - 0.0 -> 0.0
-            - 602.87506 -> 229.9
-            - 609.8 -> 232.8
+            - 585 -> 230
     # Power sensor
     power:
       id: power
@@ -96,17 +95,12 @@ sensor:
       filters:
         # Map from sensor -> measured value
         - calibrate_linear:
-            - 0.0 -> 1.14
-            - 62.06167 -> 10.93
-            - 1503.27161 -> 247.6
-            - 1599.81213 -> 263.7
-            - 3923.67700 -> 631.4
-            - 7109.50928 -> 1148.0
-            - 7237.0857 -> 1193.0
-            - 7426.71338 -> 1217.0
-        # Make everything below 2W appear as just 0W.
+            - 0.0 -> 0.0
+            - 2850 -> 500
+            - 5753 -> 990
+        # Make everything below 4W appear as just 0W.
         # Furthermore it corrects 1.14W for the power usage of the plug.
-        - lambda: if (x < (2 + 1.14)) return 0; else return (x - 1.14);
+        - lambda: if (x < (4 + 1.14)) return 0; else return (x - 1.14);
   # Total daily energy sensor
   - platform: total_daily_energy
     name: "$upper_hostname Energy Today"
@@ -136,6 +130,7 @@ switch:
   - platform: gpio
     id: relay
     name: $upper_hostname
+    restore_mode: $default_restore_mode
     pin: GPIO15
     on_turn_on:
       - light.turn_on: led
@@ -153,5 +148,6 @@ output:
 light:
   # Relay state light
   - platform: monochromatic
+    restore_mode: $default_restore_mode
     output: state_led
     id: led

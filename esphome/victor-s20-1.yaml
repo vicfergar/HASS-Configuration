@@ -1,6 +1,6 @@
 substitutions:
-  hostname: victor_s20_2
-  upper_hostname: "Lámpara mesilla"
+  hostname: victor-s20-1
+  upper_hostname: "Insecticida"
 
 esphome:
   name: $hostname
@@ -14,7 +14,7 @@ wifi:
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: $hostname
-    password: "5VsLH03EpOZM"
+    password: !secret wifi_ap_password
 
 captive_portal:
 
@@ -46,9 +46,19 @@ binary_sensor:
     on_press:
       - switch.toggle: relay
 
+script:
+  - id: timer_off
+    then:
+    - delay: 6h
+    - switch.turn_off: relay
+
 switch:
   - platform: gpio
     name: $upper_hostname
-    icon: mdi:lamp
+    icon: mdi:bug-outline
     pin: GPIO12
     id: relay
+    on_turn_on:
+      - script.execute: timer_off
+    on_turn_off:
+      - script.stop: timer_off

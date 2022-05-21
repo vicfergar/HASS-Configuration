@@ -8,20 +8,25 @@ esphome:
   name: $hostname
   platform: ESP8266
   board: esp01_1m
+  on_loop:
+    then:
+      - lambda: delay(5);
 
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
+  power_save_mode: none
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: $hostname
-    password: "5VsLH03EpOZM"
+    password: !secret wifi_ap_password
 
 captive_portal:
 
 # Enable logging
 logger:
+  tx_buffer_size: 128
   baud_rate: 0
 
 # Enable Home Assistant API
@@ -45,8 +50,8 @@ api:
 
 ota:
 
-web_server:
-  port: 80
+#web_server:
+#  port: 80
 
 status_led:
   pin:
@@ -103,7 +108,7 @@ rf_bridge:
           - lambda: 'id(fan_lab_ignore_write) = true;'
           - fan.turn_on:
               id: lab_fan
-              speed: LOW
+              speed: 33
     - if:
         condition:
           lambda: 'return data.code == 0xFD0133;' # MED
@@ -111,7 +116,7 @@ rf_bridge:
           - lambda: 'id(fan_lab_ignore_write) = true;'
           - fan.turn_on:
               id: lab_fan
-              speed: MEDIUM
+              speed: 66
     - if:
         condition:
           lambda: 'return data.code == 0xFD01CC;' # HIGH
@@ -119,7 +124,7 @@ rf_bridge:
           - lambda: 'id(fan_lab_ignore_write) = true;'
           - fan.turn_on:
               id: lab_fan
-              speed: HIGH
+              speed: 100
     - homeassistant.event:
         event: esphome.rf_code_received
         data:
@@ -134,7 +139,7 @@ sensor:
 
 switch:
   - platform: template
-    name: 'Fan light lab'
+    name: "Fan light lab"
     id: light_fan_lab
     icon: mdi:lightbulb
     lambda: 'return id(light_fan_lab_state);'
@@ -152,6 +157,11 @@ switch:
           low: 0x00FA
           high: 0x02DA
           code: 0xFD0103
+  - platform: template
+    name: "Bedroom light"
+    id: light_bedroom
+    icon: mdi:lightbulb
+    
 fan:
   - platform: speed
     output: lab_fan_output
@@ -208,7 +218,94 @@ output:
   
 binary_sensor:
 
-  #Bedroom Push Button
+  #Bedroom Single Puth Button 1 (Lidl)
+  - platform: remote_receiver
+    id: PushButton41_on
+    internal: true
+    rc_switch_raw:
+      code: '0110100101101010010110100110100110101010101010101010100110100110'
+      protocol: 8
+    filters:
+      delayed_off: $delayed_off
+    on_press:
+      - switch.template.publish:
+          id: light_bedroom
+          state: ON
+      
+  - platform: remote_receiver
+    id: PushButton41_off
+    internal: true
+    rc_switch_raw:
+      code: '0110100101101010010110100110100110101010101010101010101010100110'
+      protocol: 8
+    filters:
+      delayed_off: $delayed_off
+    on_press:
+      - switch.template.publish:
+          id: light_bedroom
+          state: OFF
+  
+  #Bedroom Single Puth Button 2 (Lidl)
+  - platform: remote_receiver
+    id: PushButton42_on
+    internal: true
+    rc_switch_raw:
+      code: '1001010101011010101010011001101010101010101010101010100110100110'
+      protocol: 8
+    filters:
+      delayed_off: $delayed_off
+    on_press:
+      - switch.template.publish:
+          id: light_bedroom
+          state: ON
+      
+  - platform: remote_receiver
+    id: PushButton42_off
+    internal: true
+    rc_switch_raw:
+      code: '1001010101011010101010011001101010101010101010101010101010100110'
+      protocol: 8
+    filters:
+      delayed_off: $delayed_off
+    on_press:
+      - switch.template.publish:
+          id: light_bedroom
+          state: OFF
+  
+  #Bedroom Single Puth Button 3 (Lidl)
+  - platform: remote_receiver
+    id: PushButton43_on
+    internal: true
+    rc_switch_raw:
+      code: '1001010101011010010110011010010110101010101010101010100110100110'
+      protocol: 8
+    filters:
+      delayed_off: $delayed_off
+    on_press:
+      - logger.log: "Single Short Clicked"
+      - homeassistant.event:
+          event: esphome.button_pressed
+          data:
+            source: ${hostname} Switch43_on
+            type: single_short
+      
+  - platform: remote_receiver
+    id: PushButton43_off
+    internal: true
+    rc_switch_raw:
+      code: '1001010101011010010110011010010110101010101010101010101010100110'
+      protocol: 8
+    filters:
+      delayed_off: $delayed_off
+    on_press:
+      - logger.log: "Single Short Clicked"
+      - homeassistant.event:
+          event: esphome.button_pressed
+          data:
+            source: ${hostname} Switch43_off
+            type: single_short
+
+  #Lab Triple Push Button
   - platform: remote_receiver
     id: PushButton11
     rc_switch_raw:
@@ -292,8 +389,91 @@ binary_sensor:
               data:
                 source: ${hostname} Switch13
                 type: single_short
+                
+  #Bedroom Triple Push Button
+  - platform: remote_receiver
+    id: PushButton31
+    rc_switch_raw:
+      code: '000101010010000000100100'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+    on_multi_click:
+      - timing:
+          - ON for at least 2s
+        then:
+          - logger.log: "Single Long Clicked"
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: ${hostname} Switch31
+                type: single_long
+      - timing:
+          - ON for at most 1s
+          - OFF for at least 0.5s
+        then:
+          - logger.log: "Single Short Clicked"
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: ${hostname} Switch31
+                type: single_short
+  - platform: remote_receiver
+    id: PushButton32
+    rc_switch_raw:
+      code: '000101010010000000100010'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+    on_multi_click:
+      - timing:
+          - ON for at least 2s
+        then:
+          - logger.log: "Single Long Clicked"
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: ${hostname} Switch32
+                type: single_long
+      - timing:
+          - ON for at most 1s
+          - OFF for at least 0.5s
+        then:
+          - logger.log: "Single Short Clicked"
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: ${hostname} Switch32
+                type: single_short
+  - platform: remote_receiver
+    id: PushButton33
+    rc_switch_raw:
+      code: '000101010010000000100001'
+      protocol: 1
+    filters:
+      delayed_off: $delayed_off
+    on_multi_click:
+      - timing:
+          - ON for at least 2s
+        then:
+          - logger.log: "Single Long Clicked"
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: ${hostname} Switch33
+                type: single_long
+      - timing:
+          - ON for at most 1s
+          - OFF for at least 0.5s
+        then:
+          - logger.log: "Single Short Clicked"
+          - homeassistant.event:
+              event: esphome.button_pressed
+              data:
+                source: ${hostname} Switch33
+                type: single_short   
            
-  #Livingroom Push Button
+  #Livingroom Triple Push Button
   #- platform: remote_receiver
   #  id: PushButton21
   #  rc_switch_raw:
@@ -375,7 +555,7 @@ binary_sensor:
   #            data:
   #              source: ${hostname} Switch23
   #              type: single_short   
-  #
+
   #Livingroom Motion
   - platform: remote_receiver
     name: "Livingroom Motion"

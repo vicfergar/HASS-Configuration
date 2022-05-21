@@ -1,6 +1,6 @@
 substitutions:
-  hostname: victor_s20_1
-  upper_hostname: "Insecticida"
+  hostname: kitchen_extractor
+  upper_hostname: "Extractor"
 
 esphome:
   name: $hostname
@@ -14,12 +14,13 @@ wifi:
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: $hostname
-    password: "5VsLH03EpOZM"
+    password: !secret wifi_ap_password
 
 captive_portal:
 
 # Enable logging
 logger:
+  baud_rate: 0
 
 # Enable Home Assistant API
 api:
@@ -35,6 +36,14 @@ sensor:
   - platform: wifi_signal
     name: "$upper_hostname WiFi Signal"
     update_interval: 60s
+#  - platform: dht
+#    pin: GPIO14
+#    model: DHT11
+#    temperature:
+#      name: "Kitchen Temperature"
+#    humidity:
+#      name: "Kitchen Humidity"
+#    update_interval: 60s
 
 binary_sensor:
   - platform: gpio
@@ -45,19 +54,27 @@ binary_sensor:
     id: button
     on_press:
       - switch.toggle: relay
+  - platform: gpio
+    pin:
+      number: GPIO1
+      mode: INPUT_PULLUP
+    id: wall_switch
+    on_state:
+      - switch.toggle: relay
 
 script:
   - id: timer_off
     then:
-    - delay: 6h
+    - delay: 90min
     - switch.turn_off: relay
 
 switch:
   - platform: gpio
     name: $upper_hostname
-    icon: mdi:bug-outline
-    pin: GPIO12
     id: relay
+    icon: mdi:radiator
+    pin: GPIO12
+    restore_mode: restore_default_off
     on_turn_on:
       - script.execute: timer_off
     on_turn_off:

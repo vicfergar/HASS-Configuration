@@ -1,11 +1,18 @@
 esphome:
   name: washing_machine
   platform: ESP8266
-  board: esp12e
+  board: d1_mini
   
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: washing_machine
+    password: !secret wifi_ap_password
+
+captive_portal:
 
 # Enable logging
 logger:
@@ -16,6 +23,8 @@ api:
 ota:
 
 globals:
+  - id: anim_frame
+    type: int
   - id: leds_state
     type: int[5]
   - id: wash_state
@@ -27,9 +36,65 @@ globals:
     restore_value: yes
     initial_value: '-1'
 
+status_led:
+  pin:
+    number: GPIO2
+    inverted: true
+    
+i2c:
+  sda: GPIO4
+  scl: GPIO5
+  
+font:
+  - file: 'fonts/Helvetica.ttf'
+    id: font1
+    size: 14
+
+image:
+  - file: "images/washing-machine-off.png"
+    id: wm_off
+    resize: 34x34
+  - file: "images/washing-machine_anim_1.png"
+    id: wm_anim_1
+    resize: 34x34
+  - file: "images/washing-machine_anim_2.png"
+    id: wm_anim_2
+    resize: 34x34
+  - file: "images/washing-machine_anim_3.png"
+    id: wm_anim_3
+    resize: 34x34
+  - file: "images/washing-machine_anim_4.png"
+    id: wm_anim_4
+    resize: 34x34
+  
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 64x48"
+    reset_pin: D0
+    address: 0x3C
+    lambda: |-
+      if(id(wash_state) == 2) {
+        switch(id(anim_frame))
+        {
+          case 0: it.image(16, 0, id(wm_anim_1)); break;
+          case 1: it.image(16, 0, id(wm_anim_2)); break;
+          case 2: it.image(16, 0, id(wm_anim_3)); break;
+          case 3: it.image(16, 0, id(wm_anim_4)); break;
+        }
+        id(anim_frame) = (id(anim_frame) + 1) % 4;
+        it.printf(0, 44, id(font1), "%5ds", id(washing_remaining).state);
+      } else {
+        it.image(16, 0, id(wm_off));
+        id(anim_frame) = 0;
+        auto text = id(washing_state).state.c_str();
+        int padlen = (16 - strlen(text)) / 2;
+        it.printf(0, 44, id(font1), "%*s%s%*s", padlen, " ", text, padlen, " ");
+        //it.printf(0, 44, id(font1), "%s", id(washing_state).state.c_str());
+      }
+
 sensor:
   - platform: duty_cycle
-    pin: GPIO5
+    pin: GPIO3 # GPIO5
     name: start
     update_interval: 1s
     accuracy_decimals: 0
@@ -48,7 +113,7 @@ sensor:
           - lambda: 'id(leds_state)[0] = 2;' # LED_ON
 
   - platform: duty_cycle
-    pin: GPIO4
+    pin: GPIO14
     name: min_60
     update_interval: 1s
     accuracy_decimals: 0
@@ -116,14 +181,15 @@ sensor:
         then:
           - lambda: 'id(leds_state)[4] = 0;' # LED_OFF
       - above: 10
-        below: 25
+        below: 40
         then:
           - lambda: 'id(leds_state)[4] = 1;' # LED_BLINK
-      - above: 25
+      - above: 40
         then:
           - lambda: 'id(leds_state)[4] = 2;' # LED_ON
 
   - platform: template
+    id: washing_remaining
     name: washing_remaining
     update_interval: 1s
     accuracy_decimals: 0
@@ -154,10 +220,11 @@ sensor:
           }
         }
         
-        return id(remaining_seconds);
+        return id(remaining_seconds) > 0 ? id(remaining_seconds) : NAN;
         
 text_sensor:
   - platform: template
+    id: washing_state
     name: washing_state
     update_interval: 1s
     icon: mdi:washing-machine

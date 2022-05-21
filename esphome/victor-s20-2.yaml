@@ -1,12 +1,16 @@
 substitutions:
-  hostname: towel_warmer
-  upper_hostname: "Toallero"
+  hostname: victor-s20-2
+  upper_hostname: "Árbol Navidad"
+  hass_icon: mdi:pine-tree
+  time_off: 4h
+  #upper_hostname: "Riego"
+  #hass_icon: mdi:watering-can
+  #time_off: 2min
 
 esphome:
   name: $hostname
   platform: ESP8266
   board: esp01_1m
-  board_flash_mode: dout
 
 wifi:
   ssid: !secret wifi_ssid
@@ -16,12 +20,11 @@ wifi:
   ap:
     ssid: $hostname
     password: !secret wifi_ap_password
-
+    
 captive_portal:
 
 # Enable logging
 logger:
-#  baud_rate: 0
 
 # Enable Home Assistant API
 api:
@@ -33,17 +36,32 @@ status_led:
     number: GPIO13
     inverted: yes
     
+time:
+  - platform: homeassistant
+    id: hass_time
+#    on_time:
+#      # Every day at 00:00:00
+#      - seconds: 0
+#        minutes: 0
+#        hours: 0
+#        then:
+#          - switch.turn_on: relay
+#      # Every day at 00:09:00
+#      - seconds: 0
+#        minutes: 0
+#        hours: 9
+#        then:
+#          - switch.turn_on: relay
+#      # Every day at 00:17:00
+#      - seconds: 0
+#        minutes: 0
+#        hours: 17
+#        then:
+#          - switch.turn_on: relay
+    
 sensor:
   - platform: wifi_signal
     name: "$upper_hostname WiFi Signal"
-    update_interval: 60s
-  - platform: dht
-    pin: GPIO14
-    model: DHT11
-    temperature:
-      name: "Bathroom Temperature"
-    humidity:
-      name: "Bathroom Humidity"
     update_interval: 60s
 
 binary_sensor:
@@ -59,15 +77,15 @@ binary_sensor:
 script:
   - id: timer_off
     then:
-    - delay: 60min
+    - delay: $time_off
     - switch.turn_off: relay
 
 switch:
   - platform: gpio
     name: $upper_hostname
-    id: relay
-    icon: mdi:radiator
+    icon: $hass_icon
     pin: GPIO12
+    id: relay
     on_turn_on:
       - script.execute: timer_off
     on_turn_off:
