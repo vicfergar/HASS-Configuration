@@ -2,5 +2,3 @@ platform: template
 sensors:
   is_rainy:
     value_template: "{{ is_state('weather.home_weather', 'showers') }}"
-    entity_id:
-      - weather.home_weather
